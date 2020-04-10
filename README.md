@@ -16,3 +16,5 @@ Kerasを用いて学習するときに何度もコードを書くのがもった
 - requirements.txt --- pythonのパッケージ管理ファイル
 
 --------------
+## 参考文献
+1. [KerasのGeneratorを自作する - kumilog.net](https://www.kumilog.net/entry/keras-generator)
