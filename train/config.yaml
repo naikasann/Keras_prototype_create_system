@@ -10,6 +10,8 @@ running       :
 
 # Set the details of the data to be learned
 Resorsedata   :
+  # How to read data(text , folder, name)
+  readdata : text
   # Image size setting
   img_row     : 227
   img_col     : 227
