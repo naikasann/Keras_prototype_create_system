@@ -34,11 +34,18 @@ def get_available_gpus():
 #--------------------< main sequence >--------------------
 # read config file.
 def main():
+    print("######################################")
+    print("# Keras Framework. Training program. #")
+    print("#      Final Update Date : 2020/4/12 #")
+    print("######################################")
+
+    # oprn congig yaml file.
     print("open config file...")
     with open("config.yaml") as file:
         print("complete!")
         yml = yaml.safe_load(file)
 
+    # GPU checking.
     print("GPU use option checking...")
     if yml["running"]["GPU"]:
         print("use gpu. setting...")
@@ -58,10 +65,11 @@ def main():
 
     # Store the execution time in a variable.
     execute_time = dt.datetime.now().strftime("%m_%d_%H_%M")
+    makedir("result/")
     makedir("result/" + execute_time)
+    makedir("result/" + execute_time + "/model")
     # Copy the YAML file that contains the execution environment.
-
-
+    shutil.copy("config.yaml", "result/" + execute_time)
 
 
 #---------------------------------------------------------
