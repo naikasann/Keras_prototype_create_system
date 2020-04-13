@@ -2,3 +2,4 @@
 train/config.yaml
 *.mp4
 *.jpg
+train/dataset.txt
