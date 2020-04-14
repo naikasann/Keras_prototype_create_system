@@ -12,22 +12,32 @@ class DatasetGenerator:
         self.images = []
         self.labels = []
     
-    def text_dataset_generator(self, yaml, file):
+    def text_dataset_generator(self, yml):
         path = yaml["Resorsedata"]["resorsepath"]
+        input_shape = (yml["Resorsedata"]["img_row"], yml["Resorsedata"]["img_col"])
+        classes = yml["Resorsedata"]["classes"]
 
-        print("read dataset...")
-        # open text file.
+        with open(path) as f:
+            readlines = f.readlines()
+
         while True:
-            try:
-                print("open text file path : " + path)
-                f = open(path)
-            except Exception as e:
-                print("An error occurred, such as a file not being found. exit program")
-                print(error type : ", e)
+            for line in readlines:
+                linebuffer = line.split(" ")
 
-            if(len(x_data) == yaml["Trainsetting"]["batchsize"]):
-                input = np.asarray(self.images, dtype = np.float32)
-                target = np.asarray(self.labels, dtype = np.float32)
-                self.reset()
 
-                yield input, target
+                try:
+                    image = img_to_array(load_img(linebuffer[0], target_size=input_shape))
+                    image /= 255.0
+                except Exception as e:
+                    print("Failed to load data.")
+                    exit(1)
+                
+                self.images.append(image)
+                self.labels.append(to_categorical(linebuffer[1], len(classes)))
+
+                if(len(x_data) == yml["Trainsetting"]["batchsize"]):
+                    input = np.asarray(self.images, dtype = np.float32)
+                    target = np.asarray(self.labels, dtype = np.float32)
+                    self.reset()
+
+                    yield input, target

@@ -1,13 +1,12 @@
-#keras lib
 import keras
 from keras import optimizers
 from keras.models import Model
 from keras.models import load_model
 from keras.callbacks import ModelCheckpoint, TensorBoard
-#tensorflow lib
+
 import tensorflow as tf
 from tensorflow.python.client import device_lib
-#other lib
+
 import numpy as np
 import datetime as dt
 import os
@@ -71,18 +70,12 @@ def main():
     # Copy the YAML file that contains the execution environment.
     shutil.copy("config.yaml", "result/" + execute_time)
 
+    # Dataset Generator loadding.
     dataset = DatasetGenerator()
-    if yaml["Resorsedata"]["readdata"] == "text":
-        try:
-            print("open text file path : " + path)
-            f = open(path)
-        except Exception as e:
-            print("An error occurred, such as a file not being found. exit program")
-            print(error type : ", e)
-        else:
-            print("The file could be opened. Load the data.")
-        traingen = dataset.text_dataset_generator(yaml, f)
+    if yml["Resorsedata"]["readdata"] == "text":
+        
     else:
+        pass
 
 
     f.close()
