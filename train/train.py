@@ -47,13 +47,16 @@ def main():
     print("GPU use option checking...")
     if yml["running"]["GPU"]:
         print("use gpu. setting...")
+        # if GPU setting.
         if not get_available_gpus():
             print("GPU is not available.You should review your configuration files and GPU preferences.")
             exit(1)
+        # GPU setting
         gpu_config = tf.ConfigProto(allow_soft_placement=True)
         gpu_config.gpu_options.allow_growth = True
         keras.backend.set_session(tf.Session(config=gpu_config))
     else:
+        # It warns you not to use the GPU.
         print("gpu dont use. It does not use a GPU. It takes a lot of time. Are you ready? (y/n)")
         text = input()
         if text == "y" or text == "Y":
@@ -72,8 +75,8 @@ def main():
 
     # Dataset Generator loadding.
     dataset = DatasetGenerator()
-    if yml["Resorsedata"]["readdata"] == "text":
-        
+    if yml["Resourcedata"]["readdata"] == "text":
+        generator = dataset.text_dataset_generator(yml)
     else:
         pass
 
