@@ -15,6 +15,7 @@ import yaml
 import shutil
 # Self-made dataset lib
 from datasetgenerator.DatasetGenerator import DatasetGenerator
+from mymodel.MyModel import MyModel
 
 #--------------------< function >--------------------
 def makedir(path):
@@ -80,8 +81,27 @@ def main():
     else:
         pass
 
+    # Model loading.
+    mymodel = MyModel(yml)
+    if yml["Modelsetting"]["retrain_model"]:
+        model = mymodel.load_model(yml["Modelsetting"]["model_path"])
+    else:
+        model = mymodel.create_model()
+    
+    # callback function(tensorboard, modelcheckpoint)
+    # first modelcheckpoint setting.
+    modelCheckpoint = ModelCheckpoint(filepath = "./result/"+ execute_time + "/model/" + yml["Trainingresult"]["model_name"] +"_{epoch:02d}.h5",
+                                  monitor=yml["callback"]["monitor"],
+                                  verbose=yml["callback"]["verbose"],
+                                  save_best_only=yml["callback"]["save_best_only"],
+                                  save_weights_only=yml["callback"]["save_weights_only"],
+                                  mode=yml["callback"]["mode"],
+                                  period=yml["callback"]["period"])
 
-    f.close()
+    # next tensorboard setting.
+    tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
+
+    
 #---------------------------------------------------------
 
 if __name__ == "__main__":
