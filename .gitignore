@@ -4,3 +4,4 @@ train/config.yaml
 *.jpg
 train/dataset.txt
 *.pyc
+*.MYCOMPUTER
