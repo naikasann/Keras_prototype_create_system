@@ -101,6 +101,17 @@ def main():
     # next tensorboard setting.
     tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
 
+    #training!
+    history = model.fit_generator(
+        generator = generator,
+        steps_per_epoch = int(np.ceil(dataset.datacounter(yml) / yml["Trainsetting"]["batchsize"])),
+        epochs = yml["Trainsetting"]["epoch"],
+        callbacks=[modelCheckpoint]
+    )
+
+    # save weights and model.
+    model.save_weights("result/model/" + execute_time + "/" + model_name + ".h5")
+    model.save_weights("result/model/" + execute_time + "/" + model_name + '{0:03d}.h5'.format(epochs), True)
     
 #---------------------------------------------------------
 
