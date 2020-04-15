@@ -13,13 +13,21 @@ class DatasetGenerator:
     def reset(self):
         self.images = []
         self.labels = []
+
+    def datacounter(self, yml):
+        resourcepath = yml["Resourcedata"]["resourcepath"]
+        # open resorse.
+        with open(resourcepath) as f:
+            readlines = f.readlines()
+
+        return len(readlines)
     
     # Generator to read text.
     def text_dataset_generator(self, yml):
         # Read the information you need from YAML.
-        resourcepath = yaml["Resourcedata"]["resourcepath"]
+        resourcepath = yml["Resourcedata"]["resourcepath"]
         input_shape = (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"])
-        classes = yml["Resorsedata"]["classes"]
+        classes = yml["Resourcedata"]["classes"]
 
         # open resorse.
         with open(resourcepath) as f:
@@ -44,7 +52,7 @@ class DatasetGenerator:
                 self.labels.append(to_categorical(linebuffer[1], len(classes)))
 
                 # When the batch size is reached, it yields.
-                if(len(x_data) == yml["Trainsetting"]["batchsize"]):
+                if(len(self.images) == yml["Trainsetting"]["batchsize"]):
                     inputs = np.asarray(self.images, dtype = np.float32)
                     targets = np.asarray(self.labels, dtype = np.float32)
                     self.reset()
