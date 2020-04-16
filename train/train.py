@@ -90,8 +90,9 @@ def main():
     
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["Usedata"])
-    val_dataset = DatasetGenerator()
     if yml["Validation"]["Usedata"]:
+        # use validation data.
+        val_dataset = DatasetGenerator()
         print("Create a generator to use the validation.")
         if yml["Validation"]["readdata"]:
             val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
@@ -101,6 +102,7 @@ def main():
                                                           )
             val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
     else:
+        # dont use validation data. Continue learning.
         print("It does not use any validation.")
 
     # Model loading.
@@ -125,6 +127,7 @@ def main():
     
     # training!
     if not yml["Validation"]["Usedata"]:
+        # no validation
         history = model.fit_generator(
             generator = generator,
             steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
@@ -132,6 +135,7 @@ def main():
             callbacks=[modelCheckpoint]
         )
     else:
+        #validation
         history = model.fit_generator(
             generator = generator,
             steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
