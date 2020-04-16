@@ -18,10 +18,12 @@ from datasetgenerator.DatasetGenerator import DatasetGenerator
 from mymodel.MyModel import MyModel
 
 #--------------------< function >--------------------
+# Check to see if you have a folder, and if you don't, create a folder.
 def makedir(path):
     if not os.path.isdir(path):
         os.mkdir(path)
 
+# Checking the status of the GPU
 def get_available_gpus():
     local_device_protos = device_lib.list_local_devices()
     dev_list = [x.name for x in local_device_protos if x.device_type == 'GPU']
@@ -106,7 +108,7 @@ def main():
     # next tensorboard setting.
     tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
 
-    #training!
+    # training!
     history = model.fit_generator(
         generator = generator,
         steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
@@ -115,9 +117,7 @@ def main():
     )
 
     # save weights and model.
-    model.save_weights("result/model/" + execute_time + "/" + model_name + ".h5")
-    model.save_weights("result/model/" + execute_time + "/" + model_name + '{0:03d}.h5'.format(epochs), True)
-    
+    model.save_weights("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch" + ".h5")    
 #---------------------------------------------------------
 
 if __name__ == "__main__":

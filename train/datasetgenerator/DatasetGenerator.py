@@ -14,6 +14,7 @@ class DatasetGenerator:
         self.images = []
         self.labels = []
 
+    # count the number of data.
     def text_datacounter(self,datapath):
         # open resorse.
         with open(datapath) as f:
