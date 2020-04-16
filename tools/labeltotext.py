@@ -1,8 +1,8 @@
 import os
 import cv2
 
-path = "./dataset"
-textfile = "dataset.txt"
+path = "./val_dataset"
+textfile = "val_dataset.txt"
 
 f = open(textfile, "w")
 
