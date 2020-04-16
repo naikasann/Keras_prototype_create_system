@@ -5,3 +5,4 @@ train/config.yaml
 train/dataset.txt
 *.pyc
 *.MYCOMPUTER
+train/val_dataset.txt
