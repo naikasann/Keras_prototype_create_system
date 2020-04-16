@@ -78,32 +78,53 @@ def main():
 
     # Dataset Generator loadding.
     dataset = DatasetGenerator()
-    if yml["Resourcedata"]["readdata"] == "text":
+    print("dataset generator loading...")
+    print("--------- dataset ---------")
+    if yml["Resourcedata"]["readdata"] == "text" or yml["Resourcedata"]["readdata"] == "TEXT":
         generator = dataset.text_dataset_generator( yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
-                                                    yml["Trainsetting"]["batchsize"]
-                                                    )
+                                                    yml["Trainsetting"]["batchsize"])
         datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
+    elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
+        generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"])
+        datacount = dataset.folder_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
-        pass
-    
+        print("It seems to have selected an unspecified generator. Stops the program.")
+        exit(1)
+    print("traindata : ", datacount)  
+
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["Usedata"])
     if yml["Validation"]["Usedata"]:
         # use validation data.
         val_dataset = DatasetGenerator()
         print("Create a generator to use the validation.")
-        if yml["Validation"]["readdata"]:
+        if yml["Validation"]["readdata"] == "text" or yml["Validation"]["readdata"] == "TEXT":
             val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
                                                           (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                           yml["Resourcedata"]["classes"],
                                                           yml["Trainsetting"]["batchsize"]
                                                           )
             val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
+        elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
+            val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
+                                                          (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                          yml["Resourcedata"]["classes"],
+                                                          yml["Trainsetting"]["batchsize"]
+                                                          )
+            val_datacount = val_dataset.folder_datacounter(yml["Validation"]["resourcepath"])
+        else:
+            print("It seems to have selected an unspecified generator. Stops the program.")
+            exit(1)
     else:
         # dont use validation data. Continue learning.
         print("It does not use any validation.")
+    print("validation data : ", val_datacount)
+    print("---------------------------")
 
     # Model loading.
     mymodel = MyModel(yml)
