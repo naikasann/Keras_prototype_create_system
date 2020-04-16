@@ -77,7 +77,12 @@ def main():
     # Dataset Generator loadding.
     dataset = DatasetGenerator()
     if yml["Resourcedata"]["readdata"] == "text":
-        generator = dataset.text_dataset_generator(yml)
+        generator = dataset.text_dataset_generator( yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"]
+                                                    )
+        datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
         pass
 
@@ -104,7 +109,7 @@ def main():
     #training!
     history = model.fit_generator(
         generator = generator,
-        steps_per_epoch = int(np.ceil(dataset.datacounter(yml) / yml["Trainsetting"]["batchsize"])),
+        steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
         epochs = yml["Trainsetting"]["epoch"],
         callbacks=[modelCheckpoint]
     )
