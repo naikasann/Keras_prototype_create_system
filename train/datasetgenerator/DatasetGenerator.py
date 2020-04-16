@@ -35,12 +35,11 @@ class DatasetGenerator:
                 try:
                     # I'll load the image, and if it doesn't work, I'll terminate the program.
                     image = img_to_array(load_img(linebuffer[0], target_size=input_shape))
-                    # Normalize image.
-                    image /= 255.0
                 except Exception as e:
                     print("Failed to load data.")
                     exit(1)
-                
+                 # Normalize image.
+                image /= 255.0
                 # list append.
                 self.images.append(image)
                 self.labels.append(to_categorical(linebuffer[1], len(classes)))

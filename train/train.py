@@ -37,7 +37,7 @@ def get_available_gpus():
 def main():
     print("######################################")
     print("# Keras Framework. Training program. #")
-    print("#      Final Update Date : 2020/4/13 #")
+    print("#      Final Update Date : 2020/4/16 #")
     print("######################################")
 
     # oprn congig yaml file.
@@ -87,6 +87,21 @@ def main():
         datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
         pass
+    
+    # Validation setting.
+    print("Validation use...?  : ", yml["Validation"]["Usedata"])
+    val_dataset = DatasetGenerator()
+    if yml["Validation"]["Usedata"]:
+        print("Create a generator to use the validation.")
+        if yml["Validation"]["readdata"]:
+            val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
+                                                          (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                          yml["Resourcedata"]["classes"],
+                                                          yml["Trainsetting"]["batchsize"]
+                                                          )
+            val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
+    else:
+        print("It does not use any validation.")
 
     # Model loading.
     mymodel = MyModel(yml)
@@ -95,7 +110,7 @@ def main():
     else:
         model = mymodel.create_model()
     
-    # callback function(tensorboard, modelcheckpoint)
+    # callback function(tensorboard, modelcheckpoint) setting.
     # first modelcheckpoint setting.
     modelCheckpoint = ModelCheckpoint(filepath = "./result/"+ execute_time + "/model/" + yml["Trainingresult"]["model_name"] +"_{epoch:02d}.h5",
                                   monitor=yml["callback"]["monitor"],
@@ -107,14 +122,24 @@ def main():
 
     # next tensorboard setting.
     tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
-
+    
     # training!
-    history = model.fit_generator(
-        generator = generator,
-        steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
-        epochs = yml["Trainsetting"]["epoch"],
-        callbacks=[modelCheckpoint]
-    )
+    if not yml["Validation"]["Usedata"]:
+        history = model.fit_generator(
+            generator = generator,
+            steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
+            epochs = yml["Trainsetting"]["epoch"],
+            callbacks=[modelCheckpoint]
+        )
+    else:
+        history = model.fit_generator(
+            generator = generator,
+            steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
+            epochs = yml["Trainsetting"]["epoch"],
+            validation_data = val_generator,
+            validation_steps = int(np.ceil(val_datacount / yml["Trainsetting"]["batchsize"])),
+            callbacks=[modelCheckpoint]
+        )
 
     # save weights and model.
     model.save_weights("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch" + ".h5")    
