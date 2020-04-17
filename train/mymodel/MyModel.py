@@ -139,4 +139,5 @@ class MyModel:
         model.add(Activation('relu'))
         model.add(GlobalAveragePooling2D())
         model.add(Dense(num_classes, activation='softmax'))
+        
         return model
