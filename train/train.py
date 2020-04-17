@@ -13,6 +13,7 @@ import os
 import h5py
 import yaml
 import shutil
+import matplotlib.pyplot as plt
 # Self-made dataset lib
 from datasetgenerator.DatasetGenerator import DatasetGenerator
 from mymodel.MyModel import MyModel
@@ -30,6 +31,37 @@ def get_available_gpus():
     if dev_list is None:
         return False
     return True
+
+def write_graph(history, write_enable, datetime, validation = False):
+    # Draw and save the accuracy graph.
+    plt.figure(figsize=(6,4))
+    plt.plot(history.history['acc'])
+    plt.title('accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    if validation:
+        plt.plot(history.history['val_acc'])
+        plt.legend(['traindata', 'validata'], loc='upper left')
+    else:
+        plt.legend(['traindata'], loc='upper left')
+    if write_enable:
+        plt.show()
+    plt.savefig("./result/" + datetime +"/" + "accuracy.png")
+
+    # Draw and save the loss graph.
+    plt.figure(figsize=(6,4))
+    plt.plot(history.history['loss'])
+    plt.title('loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    if validation:
+        plt.plot(history.history['val_loss'])
+        plt.legend(['traindata', 'valdata'], loc='upper left')
+    else:
+        plt.legend(['traindata'], loc='upper left')
+    if write_enable:
+        plt.show()
+    plt.savefig("./result/" + datetime +"/loss.png")
 #----------------------------------------------------
 
 #--------------------< main sequence >--------------------
@@ -120,10 +152,10 @@ def main():
         else:
             print("It seems to have selected an unspecified generator. Stops the program.")
             exit(1)
+        print("validation data : ", val_datacount)
     else:
         # dont use validation data. Continue learning.
         print("It does not use any validation.")
-    print("validation data : ", val_datacount)
     print("---------------------------")
 
     # Model loading.
@@ -180,6 +212,8 @@ def main():
     f = open("./result/" + execute_time + "/model/model_architecture.yaml", "w")
     f.write(yaml.dump(model.to_yaml()))
     f.close()
+    # result graph write.
+    write_graph(history, yml["Trainingresult"]["graph_write"], execute_time, yml["Validation"]["Usedata"])
 #---------------------------------------------------------
 
 if __name__ == "__main__":
