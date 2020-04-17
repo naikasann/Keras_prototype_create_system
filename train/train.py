@@ -127,11 +127,19 @@ def main():
     print("---------------------------")
 
     # Model loading.
-    mymodel = MyModel(yml)
+    mymodel = MyModel(yml["Modelsetting"]["optimizers"],
+                      yml["Modelsetting"]["model_loss"],
+                      yml["Trainsetting"]["learnrate"])
     if yml["Modelsetting"]["retrain_model"]:
-        model = mymodel.load_model(yml["Modelsetting"]["model_path"])
+        model = mymodel.load_model(yml["Modelsetting"]["model_path"],
+                                   yml["Modelsetting"]["weight_path"],
+                                   yml["Modelsetting"]["trainable"])
     else:
-        model = mymodel.create_model()
+        input_shape = (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"], 3)
+        model = mymodel.create_model(yml["Modelsetting"]["network_architecture"],
+                                     input_shape, 
+                                     yml["Resourcedata"]["classes"],
+                                     yml["Modelsetting"]["trainable"])
     
     # callback function(tensorboard, modelcheckpoint) setting.
     # first modelcheckpoint setting.
