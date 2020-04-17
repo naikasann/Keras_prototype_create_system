@@ -86,7 +86,7 @@ def main():
                                                     yml["Resourcedata"]["classes"],
                                                     yml["Trainsetting"]["batchsize"])
         datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
-    elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
+    elif yml["Resourcedata"]["readdata"] == "filename" or yml["Resourcedata"]["readdata"] == "Filename":
         generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
@@ -110,7 +110,7 @@ def main():
                                                           yml["Trainsetting"]["batchsize"]
                                                           )
             val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
-        elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
+        elif yml["Validation"]["readdata"] == "filename" or yml["Validation"]["readdata"] == "Filename":
             val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
                                                           (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                           yml["Resourcedata"]["classes"],
