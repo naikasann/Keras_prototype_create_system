@@ -167,7 +167,11 @@ def main():
         )
 
     # save weights and model.
-    model.save_weights("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch" + ".h5")    
+    model.save_weights("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch" + ".h5")
+    # write network architecture.
+    f = open("./result/" + execute_time + "/model/model_architecture.yaml", "w")
+    f.write(yaml.dump(model.to_yaml()))
+    f.close()
 #---------------------------------------------------------
 
 if __name__ == "__main__":
