@@ -15,8 +15,55 @@ class MyModel:
         self.input_shape = (yaml["Resourcedata"]["img_row"], yaml["Resourcedata"]["img_col"], 3)
         self.num_classes = len(yaml["Resourcedata"]["classes"])
 
-    def load_model(self):
-        pass
+    def load_model(self , model_path, weight_path, trainable):
+        print("Load model...")
+        # oprn congig yaml file.
+        with open(model_path) as file:
+            yml = yaml.safe_load(file)
+        model = model_from_yaml(yml)
+        model.load_weights(weight_path)
+
+        # optimizers setting.
+        optimizers = self.yml["Modelsetting"]["optimizers"]
+        base_lr = self.yml["Trainsetting"]["learnrate"]
+        print("optimizers setting.")
+        print("optimizers : ", optimizers)
+        if optimizers == "adam" or optimizers == "Adam":
+            opt = keras.optimizers.Adam(lr=base_lr)
+        elif optimizers == "sgd" or optimizers == "SGD":
+            opt = keras.optimizers.SGD(lr=base_lr)
+        elif optimizers == "adagrad" or optimizers == "Adagrad":
+            opt = keras.optimizers.Adagrad(lr=base_lr)
+        else:
+            print("This is an unconfigured optimizer that uses Adam instead.")
+            opt = keras.optimizers.Adam(lr=base_lr)
+        print("optimizer setting ... ok.")
+
+        # model loss setting.
+        model_loss = self.yml["Modelsetting"]["model_loss"]
+        print("model loss setting.")
+        print("model loss : ", model_loss)
+        if model_loss == "categorical_crossentropy":
+            loss = losses.categorical_crossentropy
+        elif model_loss == "mean_squared_error":
+            loss = losses.mean_squared_error
+        elif model_loss == "binary_crossentropy":
+            loss = losses.binary_crossentropy
+        elif model_loss == "kullback_leibler_divergence":
+            loss = losses.kullback_leibler_divergence
+        else:
+            print("An unconfigured loss function is used. Instead, we use categorical cross-entropy.")
+            loss = loss.categorical_crossentropy
+        print("model loss setting... ok.")
+        print("The model is now set up. Start compiling...")
+
+        # compile. summury.
+        model.compile(loss=loss, optimizer=opt, metrics=["accuracy"])
+        print("compile ok. summmury")
+        model.summary()
+
+        return model
+
         
     def create_model(self):
         print("Create model....")
