@@ -1,3 +1,5 @@
+/test/dataset
+/test/test_target
 /train/result
 train/config.yaml
 *.mp4
