@@ -118,7 +118,13 @@ def main():
                                                     yml["Resourcedata"]["classes"],
                                                     yml["Trainsetting"]["batchsize"])
         datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
-    elif yml["Resourcedata"]["readdata"] == "filename" or yml["Resourcedata"]["readdata"] == "Filename":
+    elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
+        generator = dataset.onefolder_dataset_generator(yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"])
+        datacount = dataset.onefolder_datacounter(yml["Resourcedata"]["resourcepath"])
+    elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
         generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
@@ -142,7 +148,14 @@ def main():
                                                           yml["Trainsetting"]["batchsize"]
                                                           )
             val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
-        elif yml["Validation"]["readdata"] == "filename" or yml["Validation"]["readdata"] == "Filename":
+        elif yml["Validation"]["readdata"] == "onefolder" or yml["Validation"]["readdata"] == "Onefolder":
+            val_generator = val_dataset.onefolder_dataset_generator(yml["Validation"]["resourcepath"],
+                                                          (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                          yml["Resourcedata"]["classes"],
+                                                          yml["Trainsetting"]["batchsize"]
+                                                          )
+            val_datacount = val_dataset.onefolder_datacounter(yml["Validation"]["resourcepath"])
+        elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
             val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
                                                           (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                           yml["Resourcedata"]["classes"],

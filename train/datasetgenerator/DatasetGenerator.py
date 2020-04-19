@@ -55,12 +55,12 @@ class DatasetGenerator:
                     yield inputs, targets
 
     # count the number of data.
-    def folder_datacounter(self, datapath):
+    def onefolder_datacounter(self, datapath):
         image_list = os.listdir(datapath)
         return len(image_list)
 
     # Generator to read folder.
-    def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
+    def onefolder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
         # Refers to all the contents of a folder. (Assign a list of image paths.)
         image_list = os.listdir(resourcepath)
         while True:
@@ -90,6 +90,43 @@ class DatasetGenerator:
                     exit(1)
                 else:
                     append = False
+
+                # When the batch size is reached, it yields.
+                if(len(self.images) == batchsize):
+                    inputs = np.asarray(self.images, dtype = np.float32)
+                    targets = np.asarray(self.labels, dtype = np.float32)
+                    self.reset()
+
+                    yield inputs, targets
+
+    def folder_datacounter(self, datapath):
+        imagespath = []
+        labeldir = os.listdir(datapath)
+
+        for labels in labeldir:
+            label_path = os.path.join(datapath, labels)
+            images = os.listdir(label_path)
+            for imagepath in images:
+                imagespath.append(os.path.join(label_path, imagepath))
+
+        return len(imagespath)
+
+    def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
+        imagespath = []
+        label = []
+        labeldir = os.listdir(resourcepath)
+
+        for category, labels in enumerate(labeldir):
+            label_path = os.path.join(resourcepath, labels)
+            images = os.listdir(label_path)
+            for imagepath in images:
+                imagespath.append(os.path.join(label_path, imagepath))
+                label.append(category)
+        
+        while True:
+            for count, image in enumerate(imagespath):
+                self.images.append(img_to_array(load_img(image, target_size=input_shape)))
+                self.labels.append(to_categorical(label[count], len(classes)))
 
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
