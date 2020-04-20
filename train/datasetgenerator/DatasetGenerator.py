@@ -15,6 +15,19 @@ class DatasetGenerator:
         self.images = []
         self.labels = []
 
+    def text_dataset(self, resourcepath):
+        xdata, ydata = [], []
+
+        with open(resourcepath) as f:
+            readlines = f.readlines()
+            
+        for line in readlines:
+            linebuffer = line.split(" ")
+            xdata.append(linebuffer[0])
+            ydata.append(linebuffer[1])
+        return xdata, ydata
+
+
     # count the number of data.
     def text_datacounter(self,datapath):
         # open resorse.
@@ -53,6 +66,16 @@ class DatasetGenerator:
                     self.reset()
 
                     yield inputs, targets
+
+    def onefolder_dataet(self, resourcepath, classes):
+        xdata , ydata = [], []
+
+        xdata = os.listdir(resourcepath)
+        for image in xdata:
+            for count, category,  in enumerate(classes):
+                if category in image:
+                    ydata.append(count)
+        return xdata, ydata
 
     # count the number of data.
     def onefolder_datacounter(self, datapath):
@@ -99,10 +122,23 @@ class DatasetGenerator:
 
                     yield inputs, targets
 
+    def folder_dataset(self, resourcepath):
+        xdata = []
+        ydata = []
+
+        labeldir = os.listdir(resourcepath)
+        for category, labelname in enumerate(labeldir):
+            label_path = os.path.join(resourcepath, labelname)
+            images = os.listdir(label_path)
+            for imagepath in images:
+                xdata.append(os.path.join(label_path, imagepath))
+                ydata.append(category)
+        return xdata, ydata
+
     def folder_datacounter(self, datapath):
         imagespath = []
-        labeldir = os.listdir(datapath)
 
+        labeldir = os.listdir(datapath)
         for labels in labeldir:
             label_path = os.path.join(datapath, labels)
             images = os.listdir(label_path)
@@ -114,8 +150,8 @@ class DatasetGenerator:
     def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
         imagespath = []
         label = []
-        labeldir = os.listdir(resourcepath)
 
+        labeldir = os.listdir(resourcepath)
         for category, labels in enumerate(labeldir):
             label_path = os.path.join(resourcepath, labels)
             images = os.listdir(label_path)
