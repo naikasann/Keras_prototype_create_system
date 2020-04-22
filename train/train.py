@@ -1,11 +1,11 @@
+import tensorflow as tf
+from tensorflow.python.client import device_lib
+
 import keras
 from keras import optimizers
 from keras.models import Model
 from keras.models import load_model
 from keras.callbacks import ModelCheckpoint, TensorBoard
-
-import tensorflow as tf
-from tensorflow.python.client import device_lib
 
 import numpy as np
 import datetime as dt
@@ -65,14 +65,13 @@ def write_graph(history, write_enable, datetime, validation = False):
 #----------------------------------------------------
 
 #--------------------< main sequence >--------------------
-# read config file.
 def main():
     print("######################################")
     print("# Keras Framework. Training program. #")
-    print("#      Final Update Date : 2020/4/16 #")
+    print("#      Final Update Date : 2020/4/21 #")
     print("######################################")
 
-    # oprn congig yaml file.
+    # open congig yaml file.
     print("open config file...")
     with open("config.yaml") as file:
         print("complete!")
