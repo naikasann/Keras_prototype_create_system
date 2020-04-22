@@ -20,7 +20,6 @@ config.yamlの各設定について
 - resourcepath --- データセットの呼び出し場所指定
 - img_row --- 画像サイズ(width)
 - img_col --- 画像サイズ(hight)
-- num_classes --- カテゴリの数(未使用かも…)
 - classes --- カテゴリ．シーケンス表記で．
 
 * `classesの書き方`
@@ -69,7 +68,7 @@ trainを回すときの設定
 (Alexnetを学習するときはAlexとかにすると識別が容易になると思います．)
 - graph_write --- 実行後グラフを描画するのかどうかを設定します．
 
-## 
+## Callback
 学習時のコールバック設定(modelcheckpoint, tensorboard)
 
 - monitor --- 監視対象の設定(loss, val_loss, acc, val_acc)
