@@ -7,7 +7,6 @@ from keras.layers import BatchNormalization, Flatten
 from keras.layers import Dense, Dropout, Activation
 from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
 from keras.models import Sequential
-from keras.models import Model
 from keras.models import model_from_yaml
 
 import yaml
