@@ -161,7 +161,7 @@ class DatasetGenerator:
         
         while True:
             for count, image in enumerate(imagespath):
-                self.images.append(img_to_array(load_img(image, target_size=input_shape)))
+                self.images.append(img_to_array(load_img(image, target_size=input_shape)) / 255.)
                 self.labels.append(to_categorical(label[count], len(classes)))
 
                 # When the batch size is reached, it yields.
