@@ -8,6 +8,7 @@ from sklearn.metrics import classification_report
 
 import pandas as pd
 import numpy as np
+import time
 import yaml
 import sys
 import os
@@ -58,16 +59,16 @@ def main():
 
     print("---------  model  ---------")
     # open congig yaml file.
-    with open(yml["TESTModel"]["model_path"]) as file:
+    with open(yml["TESTModel"]["path"] + yml["TESTModel"]["model_path"]) as file:
         model_architecture = yaml.safe_load(file)
     model = model_from_yaml(model_architecture)
     print("Load model weight...")
-    model.load_weights(yml["TESTModel"]["weight_path"])
+    model.load_weights(yml["TESTModel"]["path"] + yml["TESTModel"]["weight_path"])
     model.summary()
     print("---------------------------")
 
     predict_list, y_list = [], []
-    bar = tqdm(total = datacount)
+    bar = tqdm(total = datacount + 1)
     bar.set_description('Progression of predictions ')
     for count, (x, y) in tqdm(enumerate(zip(xdata, ydata))):
         # image file open.
@@ -93,13 +94,14 @@ def main():
         
         bar.update(1)
 
-    result = classification_report(y_list, predict_list, target_names = yml["testresourcedata"]["classes"],output_dict=True)
-    print(" ")
+    result = classification_report(y_list, predict_list, target_names = yml["testresourcedata"]["classes"], output_dict=True)
+    time.sleep(10)
+    print("\n\n\n")
     print("--------------< result >--------------")
-    print(result)
+    print(classification_report(y_list, predict_list, target_names = yml["testresourcedata"]["classes"]))
     print("--------------------------------------")
     class_pd = pd.DataFrame(result)
-    class_pd.to_csv("tanipai.csv")
+    class_pd.to_csv(yml["TESTModel"]["path"] + "classification_report.csv")
 
 if __name__ == "__main__":
     main()
