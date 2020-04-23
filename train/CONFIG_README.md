@@ -4,15 +4,11 @@
 config.yamlの各設定について
 
 -------------------
-# 各設定
-各種設定は以下の通り
-
--------------------
+# Training
 ## runnning
 実行時の環境設定．
 (GPU使用するのかどうか)
 
--------------------
 ## Resourcedata
 データセットに関係する物の設定
 
@@ -79,3 +75,22 @@ trainを回すときの設定
 - period --- callbackをどのタイミングで使用するか．(エポック指定)
 - tensorboard --- tensorboardのパス指定
 - tb_epoch --- tensorboardの更新エポックの指定
+
+-----------------------------------------
+# Test
+## TESTModel
+テストのためのモデルの呼び込み設定
+
+- path --- modelと重みのデータ，両方のデータが格納されているディレクトリを指定する．(リザルトの格納を容易にするため．)
+- model_path --- テストに使用するモデルのアーキテクチャのディレクトリを指定する．
+- weight_path --- テストで使用する学習の重みデータのディレクトリを指定する．
+`[注意] モデル・重みのディレクトリは path + model_path, path + weight_pathで指定されている．テスト結果はpathに保存される．`
+
+## testresourcedata
+テストに使用するデータについて
+
+- readdata --- trainと同様でデータの呼び込み方法
+- resourcepath --- データの参照先
+- img_row --- 画像サイズ(width)
+- img_col --- 画像サイズ(hight)
+- clasess --- カテゴリ．
