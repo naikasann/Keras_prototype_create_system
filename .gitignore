@@ -1,7 +1,6 @@
 /test/dataset
 /test/test_target
 /train/result
-train/config.yaml
 *.mp4
 *.jpg
 train/dataset.txt
@@ -9,5 +8,4 @@ train/dataset.txt
 *.MYCOMPUTER
 train/val_dataset.txt
 *.h5
-train/load_modeltest/model_architecture.yaml
 test/dataset.txt
