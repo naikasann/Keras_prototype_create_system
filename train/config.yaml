@@ -1,0 +1,105 @@
+# 2020/4/10 ~ version 0.1
+# This is the Keras framework.
+# You can change the way you train by changing this file.
+
+#######################################################################################
+# TRAINING CONFIG....                                                                 #
+#######################################################################################
+# execution environment setting
+running       :
+  GPU         : true
+
+# Set the details of the data to be learned
+Resourcedata  :
+  # How to read a data set(README reference)
+  # input : text, onefolder, folder
+  readdata    : text
+  resourcepath: ./dataset.txt
+  # Image size setting
+  img_row     : 227
+  img_col     : 227
+  # Class type (described in sequence)
+  classes     :
+    - goo
+    - choki
+    - paa
+
+# Validation data setting.
+Validation    :
+  # Use validation data?
+  Usedata     : false
+  # How to read a data set(README reference)
+  # input : text, onefolder, folder
+  readdata    : text
+  resourcepath: ./dataset/
+
+# Set the number of trainings, learning rate, etc.
+Trainsetting  :
+  epoch       : 5000
+  batchsize   : 32
+  learnrate   : 0.0001
+
+# Setting up a learning model
+Modelsetting  :
+  # categorical_crossentropy or mean_squared_error
+  # binary_crossentropy or kullback_leibler_divergence.
+  model_loss  : categorical_crossentropy
+  # adam or sgd or adagrad.
+  optimizers  : adam
+  # now Network in Network only.
+  network_architecture : nin
+  # Relearning a trained model
+  retrain_model   : false
+  model_path  : path
+  weight_path : path
+  # To learn or not to learn(default : true)
+  trainable   : true
+
+Trainingresult :
+  # Set the name of the model to save
+  model_name  : test
+  # Do you want to draw a graph of your results after training?
+  # (The resulting graph will be saved.)
+  graph_write : false
+
+# callback function setting.
+callback      :
+  # Setting the target of monitoring(Alternative loss or val_loss)
+  monitor     : loss
+  verbose     : 1
+  # True => Save from judgment result, False => Save every period.
+  save_best_only : true
+  # True = model weights save, False = model save.
+  save_weights_only : true
+  # Selecting the maximum or minimum value (max => acc,val_acc, min => loss, val_loss)
+  mode        : min
+  # How many epochs do we run callbacks on?
+  period      : 250
+  # Set the directory of tensorboard.
+  tensorboard : /
+  # Number of epochs of tensorboard updates
+  tb_epoch    : 1
+
+#######################################################################################
+# TEST CONFIG....                                                                     #
+#######################################################################################
+# target model setting.
+TESTModel     :
+  path        : ./result/04_22_17_18/
+  model_path  : /model/model_architecture.yaml
+  weight_path : /model/test_end_epoch.h5
+
+# test dataset setting
+testresourcedata :
+  # How to read a data set(README reference)
+  # input : text, onefolder, folder
+  readdata : text
+  resourcepath : ./dataset.txt
+  # Image size setting
+  img_row     : 227
+  img_col     : 227
+  # Class type (described in sequence)
+  classes     :
+    - goo
+    - choki
+    - paa
