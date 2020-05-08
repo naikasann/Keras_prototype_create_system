@@ -50,8 +50,10 @@ class MyModel:
         print("load model : ", networkarchitecture)
         if networkarchitecture == "nin" or networkarchitecture == "NiN":
             model = self.nin(input_shape, len(classes))
+        elif networkarchitecture == "segnet" or networkarchitecture == "Segnet":
+            model = self.Camvid_SegNet(input_shape, len(classes))
         else:
-            print("It's an unconfigured optimizer. Use an appropriate network.")
+            print("It's an unconfigured model. Use an appropriate network.")
             model = self.nin(input_shape, len(classes))
         print("network architecture setting ... ok.")
         
@@ -80,6 +82,8 @@ class MyModel:
             opt = keras.optimizers.SGD(lr=base_lr)
         elif optimizers == "adagrad" or optimizers == "Adagrad":
             opt = keras.optimizers.Adagrad(lr=base_lr)
+        elif optimizers == "adadelta" or optimizers == "Adadelta":
+            opt = keras.optimizers.Adadelta(lr=base_lr)
         else:
             print("This is an unconfigured optimizer that uses Adam instead.")
             opt = keras.optimizers.Adam(lr=base_lr)
@@ -192,7 +196,7 @@ class MyModel:
         model.add(Activation("relu"))
 
         model.add(Conv2D(num_classes, (1, 1), padding = "same"))
-        model.add(Reshape((input_shape[0]* input_shape[1], num_classes)))
+        model.add(Reshape((input_shape[0], input_shape[1], num_classes)))
         model.add(Activation("softmax"))
 
         return model
