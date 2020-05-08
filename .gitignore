@@ -9,3 +9,4 @@ train/dataset.txt
 train/val_dataset.txt
 *.h5
 test/dataset.txt
+CamVid
