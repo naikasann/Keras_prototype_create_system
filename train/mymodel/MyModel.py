@@ -3,9 +3,11 @@ from keras import optimizers
 from keras import losses
 from keras.models import Model
 from keras.models import load_model
-from keras.layers import BatchNormalization, Flatten
+from keras.layers import BatchNormalization, Flatten, Reshape
 from keras.layers import Dense, Dropout, Activation
-from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
+from keras.layers import Conv2D
+from keras.layers import MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
+from keras.layers import UpSampling2D
 from keras.models import Sequential
 from keras.models import model_from_yaml
 
@@ -120,14 +122,14 @@ class MyModel:
         model.add(Conv2D(256, (1, 1), strides = (2, 2), padding = "same"))
         model.add(Activation('relu'))
         # pooling layer2
-        model.add(MaxPooling2D((3, 3), strides = (2, 2), padding="same"))
+        model.add(MaxPooling2D((3, 3), strides = (2, 2), padding = "same"))
         # MLPconv layer3
         model.add(Conv2D(384, (3, 3), strides = (1, 1), padding = "same"))
         model.add(BatchNormalization())
         model.add(Conv2D(384, (1, 1), strides = (1, 1), padding = "same"))
         model.add(Activation('relu'))
         # pooling layer3
-        model.add(MaxPooling2D((3, 3), strides = (2, 2), padding="same"))
+        model.add(MaxPooling2D((3, 3), strides = (2, 2), padding = "same"))
         model.add(Activation('relu'))
         # drop out layer
         model.add(Dropout(0.5))
@@ -139,4 +141,58 @@ class MyModel:
         model.add(GlobalAveragePooling2D())
         model.add(Dense(num_classes, activation='softmax'))
         
+        return model
+    
+    def Camvid_SegNet(self, input_shape, num_classes):
+        # https://github.com/alexgkendall/SegNet-Tutorial
+        # example model : bayesian_segnet_camvid.prototxt
+        # https://github.com/alexgkendall/SegNet-Tutorial/blob/master/Example_Models/bayesian_segnet_camvid.prototxt
+
+        model = Sequential()
+        # Encode layer1
+        model.add(Conv2D(64, (3, 3), padding = "same", input_shape = input_shape))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size = (2, 2)))
+        # Encode layer2
+        model.add(Conv2D(128, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size = (2, 2)))
+        # Encode layer3
+        model.add(Conv2D(256, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size = (2, 2)))
+        # Encode layer4
+        model.add(Conv2D(512, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+        # Decoder
+        model.add(Conv2D(512, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+
+        # Upsampling decode layer1
+        model.add(UpSampling2D(size = (2, 2)))
+        model.add(Conv2D(256, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+
+        # Upsampling decode layer2
+        model.add(UpSampling2D(size = (2, 2)))
+        model.add(Conv2D(128, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+
+        # Upsampling decode layer3
+        model.add(UpSampling2D(size = (2, 2)))
+        model.add(Conv2D(64, (3, 3), padding = "same"))
+        model.add(BatchNormalization())
+        model.add(Activation("relu"))
+
+        model.add(Conv2D(num_classes, (1, 1), padding = "same"))
+        model.add(Reshape((input_shape[0]* input_shape[1], num_classes)))
+        model.add(Activation("softmax"))
+
         return model
