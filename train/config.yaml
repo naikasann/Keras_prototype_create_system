@@ -9,6 +9,9 @@
 running       :
   GPU         : true
 
+# category or segmentation
+CNN_type : segmentation
+
 # Set the details of the data to be learned
 Resourcedata  :
   # How to read a data set(README reference)
@@ -16,13 +19,42 @@ Resourcedata  :
   readdata    : text
   resourcepath: ./dataset.txt
   # Image size setting
-  img_row     : 227
-  img_col     : 227
+  img_row     : 320
+  img_col     : 320
   # Class type (described in sequence)
   classes     :
-    - goo
-    - choki
-    - paa
+    - Animal
+    - Archway
+    - Bicyclist
+    - Bridge
+    - Building
+    - Car
+    - CartLuggagePram
+    - Child
+    - Column_Pole
+    - Fence
+    - LaneMkgsDriv
+    - LaneMkgsNonDriv
+    - Misc_Text
+    - MotorcycleScooter
+    - OtherMoving
+    - ParkingBlock
+    - Pedestrian
+    - Road
+    - RoadShoulder
+    - Sidewalk
+    - SignSymbol
+    - Sky
+    - SUVPickupTruck
+    - TrafficCone
+    - TrafficLight
+    - Train
+    - Tree
+    - Truck_Bus
+    - Tunnel
+    - VegetationMisc
+    - Void
+    - Wall
 
 # Validation data setting.
 Validation    :
@@ -47,7 +79,7 @@ Modelsetting  :
   # adam or sgd or adagrad.
   optimizers  : adam
   # now Network in Network only.
-  network_architecture : nin
+  network_architecture : segnet
   # Relearning a trained model
   retrain_model   : false
   model_path  : path
