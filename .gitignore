@@ -10,3 +10,7 @@ train/val_dataset.txt
 *.h5
 test/dataset.txt
 CamVid
+train/train.txt
+train/train_labels.txt
+train/val_labels.txt
+train/val.txt
