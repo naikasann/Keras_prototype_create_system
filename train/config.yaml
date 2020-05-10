@@ -11,6 +11,8 @@ running       :
 
 # category or segmentation
 CNN_type : segmentation
+# answer data path (if category, dont setting)
+Segmentationpath : 
 
 # Set the details of the data to be learned
 Resourcedata  :
@@ -19,8 +21,8 @@ Resourcedata  :
   readdata    : text
   resourcepath: ./dataset.txt
   # Image size setting
-  img_row     : 320
-  img_col     : 320
+  img_row     : 480
+  img_col     : 360
   # Class type (described in sequence)
   classes     :
     - Animal
