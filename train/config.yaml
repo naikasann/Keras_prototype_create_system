@@ -26,39 +26,7 @@ Resourcedata  :
   img_row     : 480
   img_col     : 360
   # Class type (described in sequence)
-  classes     :
-    - Animal
-    - Archway
-    - Bicyclist
-    - Bridge
-    - Building
-    - Car
-    - CartLuggagePram
-    - Child
-    - Column_Pole
-    - Fence
-    - LaneMkgsDriv
-    - LaneMkgsNonDriv
-    - Misc_Text
-    - MotorcycleScooter
-    - OtherMoving
-    - ParkingBlock
-    - Pedestrian
-    - Road
-    - RoadShoulder
-    - Sidewalk
-    - SignSymbol
-    - Sky
-    - SUVPickupTruck
-    - TrafficCone
-    - TrafficLight
-    - Train
-    - Tree
-    - Truck_Bus
-    - Tunnel
-    - VegetationMisc
-    - Void
-    - Wall
+  classes     : 
 
 # Validation data setting.
 Validation    :
