@@ -50,8 +50,6 @@ class MyModel:
         print("load model : ", networkarchitecture)
         if networkarchitecture == "nin" or networkarchitecture == "NiN":
             model = self.nin(input_shape, len(classes))
-        elif networkarchitecture == "segnet" or networkarchitecture == "Segnet":
-            model = self.Camvid_SegNet(input_shape, len(classes))
         else:
             print("It's an unconfigured model. Use an appropriate network.")
             model = self.nin(input_shape, len(classes))
@@ -145,60 +143,4 @@ class MyModel:
         model.add(GlobalAveragePooling2D())
         model.add(Dense(num_classes, activation='softmax'))
         
-        return model
-    
-    def Camvid_SegNet(self, input_shape, num_classes):
-        # https://github.com/alexgkendall/SegNet-Tutorial
-        # example model : bayesian_segnet_camvid.prototxt
-        # https://github.com/alexgkendall/SegNet-Tutorial/blob/master/Example_Models/bayesian_segnet_camvid.prototxt
-
-        print("input shape ", input_shape)
-
-        model = Sequential()
-        # Encode layer1
-        model.add(Conv2D(64, (3, 3), padding = "same", input_shape = input_shape))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size = (2, 2)))
-        # Encode layer2
-        model.add(Conv2D(128, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size = (2, 2)))
-        # Encode layer3
-        model.add(Conv2D(256, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size = (2, 2)))
-        # Encode layer4
-        model.add(Conv2D(512, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-        # Decoder
-        model.add(Conv2D(512, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-
-        # Upsampling decode layer1
-        model.add(UpSampling2D(size = (2, 2)))
-        model.add(Conv2D(256, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-
-        # Upsampling decode layer2
-        model.add(UpSampling2D(size = (2, 2)))
-        model.add(Conv2D(128, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-
-        # Upsampling decode layer3
-        model.add(UpSampling2D(size = (2, 2)))
-        model.add(Conv2D(64, (3, 3), padding = "same"))
-        model.add(BatchNormalization())
-        model.add(Activation("relu"))
-
-        model.add(Conv2D(num_classes, (1, 1), padding = "same"))
-        model.add(Reshape((input_shape[0]*input_shape[1], num_classes)))
-        model.add(Activation("softmax"))
-
         return model
