@@ -13,13 +13,15 @@ running       :
 CNN_type : segmentation
 # answer data path (if category, dont setting)
 Segmentationpath : 
+  targetpath    : ./train_labels.txt
+  valtargetpath : ./val_labels.txt
 
 # Set the details of the data to be learned
 Resourcedata  :
   # How to read a data set(README reference)
   # input : text, onefolder, folder
-  readdata    : text
-  resourcepath: ./dataset.txt
+  readdata    : 
+  resourcepath: ./train.txt
   # Image size setting
   img_row     : 480
   img_col     : 360
@@ -61,16 +63,16 @@ Resourcedata  :
 # Validation data setting.
 Validation    :
   # Use validation data?
-  Usedata     : false
+  Usedata     : true
   # How to read a data set(README reference)
   # input : text, onefolder, folder
-  readdata    : text
-  resourcepath: ./dataset/
+  readdata    : 
+  resourcepath: ./val.txt
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
-  epoch       : 5000
-  batchsize   : 32
+  epoch       : 10
+  batchsize   : 8
   learnrate   : 0.0001
 
 # Setting up a learning model

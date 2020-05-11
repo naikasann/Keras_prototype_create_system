@@ -171,3 +171,52 @@ class DatasetGenerator:
                     self.reset()
 
                     yield inputs, targets
+
+    # count the number of data for segmentation.
+    def segmentation_datacounter(self,inputpath, targetpath):
+        # open resorse.
+        with open(inputpath) as inputfile:
+            inputlines = inputfile.readlines()
+        with open(targetpath) as targetfile:
+            targetlines = targetfile.readlines()
+
+        return len(inputlines), len(targetlines)
+
+    # Generator to read text for segmentation.
+    def segmentation_generator(self, inputpath, targetpath, input_shape, classes, batchsize):
+        # open input.
+        with open(inputpath) as inputfile:
+            inputlines = inputfile.readlines()
+        # open target.
+        with open(targetpath) as targetfile:
+            targetlines = targetfile.readlines()
+
+        # loop for generator.
+        while True:
+            for input, target in zip(inputlines, targetlines):
+                input_buffer = input.split("\n")
+                target_buffer = target.split("\n")
+                try:
+                    # I'll load the image, and if it doesn't work, I'll terminate the program.
+                    # input image & target image
+                    inputimage = img_to_array(load_img(input_buffer[0], target_size=input_shape))
+                    targetimage = img_to_array(load_img(target_buffer[0], target_size=input_shape))
+                except Exception as e:
+                    print("Failed to load data.")
+                    print("ERROR : ", e)
+                    exit(1)
+                 # Normalize image.
+                inputimage /= 255.0
+                targetimage /= 255.0
+
+                # list append.
+                self.images.append(inputimage)
+                self.labels.append(targetimage)
+
+                # When the batch size is reached, it yields.
+                if(len(self.images) == batchsize):
+                    inputs = np.asarray(self.images, dtype = np.float32)
+                    targets = np.asarray(self.labels, dtype = np.float32)
+                    self.reset()
+
+                    yield inputs, targets

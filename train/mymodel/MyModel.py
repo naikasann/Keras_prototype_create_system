@@ -152,6 +152,8 @@ class MyModel:
         # example model : bayesian_segnet_camvid.prototxt
         # https://github.com/alexgkendall/SegNet-Tutorial/blob/master/Example_Models/bayesian_segnet_camvid.prototxt
 
+        print("input shape ", input_shape)
+
         model = Sequential()
         # Encode layer1
         model.add(Conv2D(64, (3, 3), padding = "same", input_shape = input_shape))
@@ -196,7 +198,7 @@ class MyModel:
         model.add(Activation("relu"))
 
         model.add(Conv2D(num_classes, (1, 1), padding = "same"))
-        model.add(Reshape((input_shape[0], input_shape[1], num_classes)))
+        model.add(Reshape((input_shape[0]*input_shape[1], num_classes)))
         model.add(Activation("softmax"))
 
         return model

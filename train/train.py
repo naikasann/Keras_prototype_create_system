@@ -133,12 +133,18 @@ def main():
         else:
             print("It seems to have selected an unspecified generator. Stops the program.")
             exit(1)
+        print("traindata : ", datacount)  
     elif yml["CNN_type"] == "segmentation" or yml["CNN_type"] == "image":
-        pass
-    ##############################################################################
+        generator = dataset.segmentation_generator(yml["Resourcedata"]["resourcepath"],
+                                                        yml["Segmentationpath"]["targetpath"],
+                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                        yml["Resourcedata"]["classes"],
+                                                        yml["Trainsetting"]["batchsize"])
+        datacount, targetcount = dataset.segmentation_datacounter(yml["Resourcedata"]["resourcepath"], yml["Segmentationpath"]["targetpath"])
+        print("input count", datacount)
+        print("target count", targetcount)
     else:
         print("It seems to have selected an unspecified generator. Stops the program.")
-    #print("traindata : ", datacount)  
 
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["Usedata"])
@@ -173,8 +179,14 @@ def main():
                 exit(1)
             print("validation data : ", val_datacount)
         elif yml["CNN_type"] == "segmentation" or yml["CNN_type"] == "image":
-            #######################################################################
-            pass
+            val_generator = val_dataset.segmentation_generator(yml["Validation"]["resourcepath"],
+                                                        yml["Segmentationpath"]["valtargetpath"],
+                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                        yml["Resourcedata"]["classes"],
+                                                        yml["Trainsetting"]["batchsize"])
+            val_datacount, targetcount = val_dataset.segmentation_datacounter(yml["Validation"]["resourcepath"], yml["Segmentationpath"]["valtargetpath"])
+            print("input count", datacount)
+            print("target count", targetcount)
     else:
         # dont use validation data. Continue learning.
         print("It does not use any validation.")
