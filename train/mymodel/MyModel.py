@@ -141,6 +141,6 @@ class MyModel:
         model.add(Conv2D(3, (1, 1), strides = (1, 1), padding = "same"))
         model.add(Activation('relu'))
         model.add(GlobalAveragePooling2D())
-        model.add(Dense(num_classes, activation='softmax'))
+        model.add(Activation("softmax"))
         
         return model

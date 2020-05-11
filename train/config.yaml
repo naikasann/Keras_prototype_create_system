@@ -9,24 +9,20 @@
 running       :
   GPU         : true
 
-# category or segmentation
-CNN_type : segmentation
-# answer data path (if category, dont setting)
-Segmentationpath : 
-  targetpath    : ./train_labels.txt
-  valtargetpath : ./val_labels.txt
-
 # Set the details of the data to be learned
 Resourcedata  :
   # How to read a data set(README reference)
   # input : text, onefolder, folder
-  readdata    : 
-  resourcepath: ./train.txt
+  readdata    : text
+  resourcepath: ./dataset.txt
   # Image size setting
-  img_row     : 480
-  img_col     : 360
+  img_row     : 227
+  img_col     : 227
   # Class type (described in sequence)
   classes     : 
+    - goo
+    - choki
+    - paa
 
 # Validation data setting.
 Validation    :
@@ -34,8 +30,8 @@ Validation    :
   Usedata     : true
   # How to read a data set(README reference)
   # input : text, onefolder, folder
-  readdata    : 
-  resourcepath: ./val.txt
+  readdata    : text
+  resourcepath: ./dataset.txt
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
@@ -51,7 +47,7 @@ Modelsetting  :
   # adam or sgd or adagrad.
   optimizers  : adam
   # now Network in Network only.
-  network_architecture : segnet
+  network_architecture : nin
   # Relearning a trained model
   retrain_model   : false
   model_path  : path
