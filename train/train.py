@@ -111,34 +111,28 @@ def main():
     dataset = DatasetGenerator()
     print("dataset generator loading...")
     print("--------- dataset ---------")
-    if yml["CNN_type"] == "category" or yml["CNN_type"] == "label":
-        if yml["Resourcedata"]["readdata"] == "text" or yml["Resourcedata"]["readdata"] == "TEXT":
-            generator = dataset.text_dataset_generator( yml["Resourcedata"]["resourcepath"],
-                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                        yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"])
-            datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
-        elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
-            generator = dataset.onefolder_dataset_generator(yml["Resourcedata"]["resourcepath"],
-                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                        yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"])
-            datacount = dataset.onefolder_datacounter(yml["Resourcedata"]["resourcepath"])
-        elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
-            generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
-                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                        yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"])
-            datacount = dataset.folder_datacounter(yml["Resourcedata"]["resourcepath"])
-        else:
-            print("It seems to have selected an unspecified generator. Stops the program.")
-            exit(1)
-    elif yml["CNN_type"] == "segmentation" or yml["CNN_type"] == "image":
-        pass
-    ##############################################################################
+    if yml["Resourcedata"]["readdata"] == "text" or yml["Resourcedata"]["readdata"] == "TEXT":
+        generator = dataset.text_dataset_generator( yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"])
+        datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
+    elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
+        generator = dataset.onefolder_dataset_generator(yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"])
+        datacount = dataset.onefolder_datacounter(yml["Resourcedata"]["resourcepath"])
+    elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
+        generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"])
+        datacount = dataset.folder_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
         print("It seems to have selected an unspecified generator. Stops the program.")
-    #print("traindata : ", datacount)  
+        exit(1)
+    print("traindata : ", datacount)  
 
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["Usedata"])
@@ -146,35 +140,31 @@ def main():
         # use validation data.
         val_dataset = DatasetGenerator()
         print("Create a generator to use the validation.")
-        if yml["CNN_type"] == "category" or yml["CNN_type"] == "label":
-            if yml["Validation"]["readdata"] == "text" or yml["Validation"]["readdata"] == "TEXT":
-                val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
-                                                            (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                            yml["Resourcedata"]["classes"],
-                                                            yml["Trainsetting"]["batchsize"]
-                                                            )
-                val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
-            elif yml["Validation"]["readdata"] == "onefolder" or yml["Validation"]["readdata"] == "Onefolder":
-                val_generator = val_dataset.onefolder_dataset_generator(yml["Validation"]["resourcepath"],
-                                                            (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                            yml["Resourcedata"]["classes"],
-                                                            yml["Trainsetting"]["batchsize"]
-                                                            )
-                val_datacount = val_dataset.onefolder_datacounter(yml["Validation"]["resourcepath"])
-            elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
-                val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
-                                                            (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
-                                                            yml["Resourcedata"]["classes"],
-                                                            yml["Trainsetting"]["batchsize"]
-                                                            )
-                val_datacount = val_dataset.folder_datacounter(yml["Validation"]["resourcepath"])
-            else:
-                print("It seems to have selected an unspecified generator. Stops the program.")
-                exit(1)
-            print("validation data : ", val_datacount)
-        elif yml["CNN_type"] == "segmentation" or yml["CNN_type"] == "image":
-            #######################################################################
-            pass
+        if yml["Validation"]["readdata"] == "text" or yml["Validation"]["readdata"] == "TEXT":
+            val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
+                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                        yml["Resourcedata"]["classes"],
+                                                        yml["Trainsetting"]["batchsize"]
+                                                        )
+            val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
+        elif yml["Validation"]["readdata"] == "onefolder" or yml["Validation"]["readdata"] == "Onefolder":
+            val_generator = val_dataset.onefolder_dataset_generator(yml["Validation"]["resourcepath"],
+                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                        yml["Resourcedata"]["classes"],
+                                                        yml["Trainsetting"]["batchsize"]
+                                                        )
+            val_datacount = val_dataset.onefolder_datacounter(yml["Validation"]["resourcepath"])
+        elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
+            val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
+                                                        (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                        yml["Resourcedata"]["classes"],
+                                                        yml["Trainsetting"]["batchsize"]
+                                                        )
+            val_datacount = val_dataset.folder_datacounter(yml["Validation"]["resourcepath"])
+        else:
+            print("It seems to have selected an unspecified generator. Stops the program.")
+            exit(1)
+        print("validation data : ", val_datacount)
     else:
         # dont use validation data. Continue learning.
         print("It does not use any validation.")
