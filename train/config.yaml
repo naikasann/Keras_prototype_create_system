@@ -35,9 +35,9 @@ Validation    :
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
-  epoch       : 10
-  batchsize   : 8
-  learnrate   : 0.0001
+  epoch       : 10000
+  batchsize   : 128
+  learnrate   : 0.00001
 
 # Setting up a learning model
 Modelsetting  :
@@ -74,7 +74,7 @@ callback      :
   # Selecting the maximum or minimum value (max => acc,val_acc, min => loss, val_loss)
   mode        : min
   # How many epochs do we run callbacks on?
-  period      : 250
+  period      : 1000
   # Set the directory of tensorboard.
   tensorboard : /
   # Number of epochs of tensorboard updates
