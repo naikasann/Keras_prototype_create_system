@@ -2,7 +2,9 @@ import os
 import cv2
 from tqdm import tqdm
 
+# Specifies the path to be labeled.
 path = ""
+# Specifies the name of the text file to output.
 textfile = ".txt"
 
 f = open(textfile, "w")

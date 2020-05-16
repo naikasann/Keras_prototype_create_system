@@ -2,10 +2,12 @@ import os
 import cv2
 from tqdm import tqdm
 
+# set folder
 path = ""
+# set imagepath.
 size = (000, 000)
 
-### [画像パス] [ラベルつけ]を行う。
+# Resize all images.
 """
 filedir = os.listdir(path)
 for labels in filedir:
@@ -19,7 +21,7 @@ for labels in filedir:
         cv2.imwrite(imagepath, new_img)
 """
 
-# 指定したフォルダーの内の画像をすべてテキストに書き込む
+# [image_path]
 """
 filedir = os.listdir(path)
 print("File count :", len(filedir))
