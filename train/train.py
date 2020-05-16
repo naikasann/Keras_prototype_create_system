@@ -1,11 +1,9 @@
 import tensorflow as tf
+import tensorflow.keras as keras
 from tensorflow.python.client import device_lib
-
-import keras
-from keras import optimizers
-from keras.models import Model
-from keras.models import load_model
-from keras.callbacks import ModelCheckpoint, TensorBoard
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import load_model
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
 
 import numpy as np
 import datetime as dt
@@ -85,10 +83,6 @@ def main():
         if not get_available_gpus():
             print("GPU is not available.You should review your configuration files and GPU preferences.")
             exit(1)
-        # GPU setting
-        gpu_config = tf.ConfigProto(allow_soft_placement=True)
-        gpu_config.gpu_options.allow_growth = True
-        keras.backend.set_session(tf.Session(config=gpu_config))
     else:
         # It warns you not to use the GPU.
         print("gpu dont use. It does not use a GPU. It takes a lot of time. Are you ready? (y/n)")

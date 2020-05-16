@@ -1,15 +1,15 @@
-import keras
-from keras import optimizers
-from keras import losses
-from keras.models import Model
-from keras.models import load_model
-from keras.layers import BatchNormalization, Flatten, Reshape
-from keras.layers import Dense, Dropout, Activation
-from keras.layers import Conv2D
-from keras.layers import MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
-from keras.layers import UpSampling2D
-from keras.models import Sequential
-from keras.models import model_from_yaml
+import tensorflow as tf
+import tensorflow.keras as keras
+from tensorflow.keras import optimizers
+from tensorflow.keras import losses
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import load_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import model_from_yaml
+from tensorflow.keras.layers import BatchNormalization, Flatten
+from tensorflow.keras.layers import Dense, Dropout, Activation
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.layers import MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
 
 import yaml
 
