@@ -1,8 +1,8 @@
-import keras
-from keras.models import Model
-from keras.models import load_model
-from keras.models import model_from_yaml
-from keras.preprocessing.image import img_to_array, load_img
+import tensorflow.keras as keras
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import load_model
+from tensorflow.keras.models import model_from_yaml
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
 
 from sklearn.metrics import classification_report
 
@@ -29,7 +29,7 @@ def makedir(path):
 def main():
     print("######################################")
     print("#    Keras Framework.  TEST program. #")
-    print("#      Final Update Date : 2020/4/22 #")
+    print("#      Final Update Date : 2020/5/16 #")
     print("######################################")
 
     # open congig yaml file.
@@ -43,13 +43,13 @@ def main():
     print("test dataset loading...")
     print("--------- dataset ---------")
     if yml["testresourcedata"]["readdata"] == "text" or yml["testresourcedata"]["readdata"] == "TEXT":
-        xdata, ydata = dataset.text_dataset(yml["testresourcedata"]["resourcepath"])
+        input, answer = dataset.text_dataset(yml["testresourcedata"]["resourcepath"])
         datacount = dataset.text_datacounter(yml["testresourcedata"]["resourcepath"])
     elif yml["testresourcedata"]["readdata"] == "onefolder" or yml["testresourcedata"]["readdata"] == "Onefolder":
-        xdata, ydata = dataset.onefolder_dataet(yml["testresourcedata"]["resourcepath"])
+        input, answer = dataset.onefolder_dataet(yml["testresourcedata"]["resourcepath"])
         datacount = dataset.onefolder_datacounter(yml["testresourcedata"]["resourcepath"])
     elif yml["testresourcedata"]["readdata"] == "folder" or yml["testresourcedata"]["readdata"] == "Folder":
-        xdata, ydata = dataset.folder_dataset(yml["testresourcedata"]["resourcepath"])
+        input, answer = dataset.folder_dataset(yml["testresourcedata"]["resourcepath"])
         datacount = dataset.folder_datacounter(yml["testresourcedata"]["resourcepath"])
     else:
         print("It appears that you have selected a data loader that is not specified. Stops the program.")
@@ -70,7 +70,7 @@ def main():
     predict_list, y_list = [], []
     bar = tqdm(total = datacount + 1)
     bar.set_description('Progression of predictions ')
-    for count, (x, y) in tqdm(enumerate(zip(xdata, ydata))):
+    for count, (x, y) in tqdm(enumerate(zip(input, answer))):
         # image file open.
         try:
             # I'll load the image, and if it doesn't work, I'll terminate the program.
