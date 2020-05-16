@@ -15,24 +15,27 @@ class DatasetGenerator:
         self.images = []
         self.labels = []
 
+    # for test program. It's better to alter it later.
     def text_dataset(self, resourcepath):
-        xdata, ydata = [], []
-
+        input, answer = [], []
+        # open text file.
         with open(resourcepath) as f:
             readlines = f.readlines()
-            
+        
+        # Input data.
         for line in readlines:
             linebuffer = line.split(" ")
-            xdata.append(linebuffer[0])
-            ydata.append(linebuffer[1])
-        return xdata, ydata
-
+            input.append(linebuffer[0])
+            answer.append(linebuffer[1])
+            # return [imagepath], label
+        return input, answer
 
     # count the number of data.
     def text_datacounter(self,datapath):
         # open resorse.
         with open(datapath) as f:
             readlines = f.readlines()
+        # Returning the number of data
         return len(readlines)
     
     # Generator to read text.
@@ -61,21 +64,26 @@ class DatasetGenerator:
 
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
+                    # Convert to Numpy array type
                     inputs = np.asarray(self.images, dtype = np.float32)
                     targets = np.asarray(self.labels, dtype = np.float32)
+                    # Resetting an Instance
                     self.reset()
-
+                    # for generator.
                     yield inputs, targets
 
+    # for test program. It's better to alter it later.
     def onefolder_dataet(self, resourcepath, classes):
-        xdata , ydata = [], []
+        input , answer = [], []
 
-        xdata = os.listdir(resourcepath)
-        for image in xdata:
+        input = os.listdir(resourcepath)
+        for image in input:
             for count, category,  in enumerate(classes):
+                # Find out which category. Identify the image name and assign a label.
                 if category in image:
-                    ydata.append(count)
-        return xdata, ydata
+                    answer.append(count)
+        # return [imagepath], [label]
+        return input, answer
 
     # count the number of data.
     def onefolder_datacounter(self, datapath):
@@ -86,8 +94,10 @@ class DatasetGenerator:
     def onefolder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
         # Refers to all the contents of a folder. (Assign a list of image paths.)
         image_list = os.listdir(resourcepath)
+        # for generator.
         while True:
             for image_path in image_list:
+                # image path read.
                 image_path = os.path.join(resourcepath, image_path)
                 try:
                     # I'll load the image, and if it doesn't work, I'll terminate the program.
@@ -103,8 +113,11 @@ class DatasetGenerator:
 
                 # Labeling based on the name of the image and the name of the category.
                 for count, category in enumerate(classes):
+                    # Check each category to see which label it was.
                     if category in image_path:
+                        # Assigning labels.
                         self.labels.append(to_categorical(count, len(classes)))
+                        # Assign "True" to the variable to check if the category is added or not.
                         append = True
                         break
                 # Check the success of the label assignment.
@@ -112,6 +125,7 @@ class DatasetGenerator:
                     print("Failed to assign a label.")
                     exit(1)
                 else:
+                    # Resetting the check for non-applicable labels.
                     append = False
 
                 # When the batch size is reached, it yields.
@@ -122,26 +136,35 @@ class DatasetGenerator:
 
                     yield inputs, targets
 
+    # for test program. It's better to alter it later.
     def folder_dataset(self, resourcepath):
-        xdata = []
-        ydata = []
+        input = []
+        answer = []
 
+        # folder check.
         labeldir = os.listdir(resourcepath)
+        # Loop the number of label folders.
         for category, labelname in enumerate(labeldir):
             label_path = os.path.join(resourcepath, labelname)
             images = os.listdir(label_path)
+            # Extracts data from a set of image files.
             for imagepath in images:
-                xdata.append(os.path.join(label_path, imagepath))
-                ydata.append(category)
-        return xdata, ydata
+                input.append(os.path.join(label_path, imagepath))
+                answer.append(category)
+        # return [imagepath], [label] 
+        return input, answer
 
+    # count the number of data.
     def folder_datacounter(self, datapath):
         imagespath = []
 
+        # folder check.
         labeldir = os.listdir(datapath)
+        # Loop the number of label folders.
         for labels in labeldir:
             label_path = os.path.join(datapath, labels)
             images = os.listdir(label_path)
+            # Extracts data from a set of image files.
             for imagepath in images:
                 imagespath.append(os.path.join(label_path, imagepath))
 
@@ -151,16 +174,22 @@ class DatasetGenerator:
         imagespath = []
         label = []
 
+        # folder check.
         labeldir = os.listdir(resourcepath)
+        # Loop the number of label folders.
         for category, labels in enumerate(labeldir):
             label_path = os.path.join(resourcepath, labels)
             images = os.listdir(label_path)
+            # Extracts data from a set of image files.
+            # [imagepath], [label] 
             for imagepath in images:
                 imagespath.append(os.path.join(label_path, imagepath))
                 label.append(category)
         
+        # for genarator.
         while True:
             for count, image in enumerate(imagespath):
+                # input image & label.
                 self.images.append(img_to_array(load_img(image, target_size=input_shape)) / 255.)
                 self.labels.append(to_categorical(label[count], len(classes)))
 
