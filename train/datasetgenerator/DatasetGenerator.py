@@ -169,7 +169,8 @@ class DatasetGenerator:
                 imagespath.append(os.path.join(label_path, imagepath))
 
         return len(imagespath)
-
+    
+    # Generator to read folder.
     def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
         imagespath = []
         label = []
