@@ -1,4 +1,4 @@
-   def vgg16model(self, input_shape, num_classes):
+    def vgg16model(self, input_shape, num_classes):
         print("create vgg16 model...")
 
         input_layer = Input(shape=input_shape)
