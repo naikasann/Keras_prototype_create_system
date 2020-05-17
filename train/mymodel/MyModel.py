@@ -14,18 +14,21 @@ from tensorflow.keras.layers import MaxPooling2D, GlobalAveragePooling2D, Averag
 import yaml
 
 class MyModel:
+    # setting instance
     def __init__(self, optimizer, modelloss, base_lr):
         self.optimizers = optimizer
         self.modelloss = modelloss
         self.base_lr = base_lr
 
+    # Read the network architecture from the YAML file.
     def load_model(self , model_path, weight_path, trainable):
         print("Load model...")
-        # oprn congig yaml file.
+        # open congig yaml file.
         with open(model_path) as file:
             yml = yaml.safe_load(file)
         model = model_from_yaml(yml)
         print("Load model weight.")
+        # Read the weight of the model.
         model.load_weights(weight_path)
 
         # model freeze?
@@ -37,17 +40,20 @@ class MyModel:
                       optimizer=self.set_optimizers(),
                       metrics=["accuracy"])
         print("compile ok. summmury")
+        # Display the results of the compiled model.
         model.summary()
 
         return model
 
-        
+    # Create a new model.
     def create_model(self, networkarchitecture, input_shape, classes, trainable):
         print("Create model....")
-
         # networkarchitecture setting.
         print("network architecture setting.")
         print("load model : ", networkarchitecture)
+        ############################################
+        #       Generate a sequential model.       #
+        ############################################
         if networkarchitecture == "nin" or networkarchitecture == "NiN":
             model = self.nin(input_shape, len(classes))
         else:
@@ -64,43 +70,43 @@ class MyModel:
                       optimizer=self.set_optimizers(), 
                       metrics=["accuracy"])
         print("compile ok. summmury")
+        # Display the results of the compiled model.
         model.summary()
 
         return model
 
+    # Set the optimizer and return it.
     def set_optimizers(self):
-        # optimizers setting.
-        optimizers = self.optimizers
-        base_lr = self.base_lr
         print("optimizers setting.")
-        print("optimizers : ", optimizers)
-        if optimizers == "adam" or optimizers == "Adam":
-            opt = keras.optimizers.Adam(lr=base_lr)
-        elif optimizers == "sgd" or optimizers == "SGD":
-            opt = keras.optimizers.SGD(lr=base_lr)
-        elif optimizers == "adagrad" or optimizers == "Adagrad":
-            opt = keras.optimizers.Adagrad(lr=base_lr)
-        elif optimizers == "adadelta" or optimizers == "Adadelta":
-            opt = keras.optimizers.Adadelta(lr=base_lr)
+        print("optimizers : ", self.optimizers)
+        # Configure the optimizer from config.
+        if self.optimizers == "adam" or self.optimizers == "Adam":
+            opt = keras.optimizers.Adam(lr=self.base_lr)
+        elif self.optimizers == "sgd" or self.optimizers == "SGD":
+            opt = keras.optimizers.SGD(lr=self.base_lr)
+        elif self.optimizers == "adagrad" or self.optimizers == "Adagrad":
+            opt = keras.optimizers.Adagrad(lr=self.base_lr)
+        elif self.optimizers == "adadelta" or self.optimizers == "Adadelta":
+            opt = keras.optimizers.Adadelta(lr=self.base_lr)
         else:
             print("This is an unconfigured optimizer that uses Adam instead.")
-            opt = keras.optimizers.Adam(lr=base_lr)
+            opt = keras.optimizers.Adam(lr=self.base_lr)
         print("optimizer setting ... ok.")
 
         return opt
     
+    # Set the loss function and return it.
     def set_modelloss(self):
-        # model loss setting.
-        model_loss = self.modelloss
         print("model loss setting.")
-        print("model loss : ", model_loss)
-        if model_loss == "categorical_crossentropy":
+        print("model loss : ", self.modelloss)
+        # Configure the loss function from config.
+        if self.modelloss == "categorical_crossentropy":
             loss = losses.categorical_crossentropy
-        elif model_loss == "mean_squared_error":
+        elif self.modelloss == "mean_squared_error":
             loss = losses.mean_squared_error
-        elif model_loss == "binary_crossentropy":
+        elif self.modelloss == "binary_crossentropy":
             loss = losses.binary_crossentropy
-        elif model_loss == "kullback_leibler_divergence":
+        elif self.modelloss == "kullback_leibler_divergence":
             loss = losses.kullback_leibler_divergence
         else:
             print("An unconfigured loss function is used. Instead, we use categorical cross-entropy.")
@@ -109,6 +115,7 @@ class MyModel:
 
         return loss
 
+    # Return the structure of Network in Network.
     def nin(self, input_shape, num_classes):
         model = Sequential()
         # MLPconv layer1
