@@ -109,19 +109,22 @@ def main():
         generator = dataset.text_dataset_generator( yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
-                                                    yml["Trainsetting"]["batchsize"])
+                                                    yml["Trainsetting"]["batchsize"],
+                                                    yml["Trainsetting"]["shuffle"])
         datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
     elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
         generator = dataset.onefolder_dataset_generator(yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
-                                                    yml["Trainsetting"]["batchsize"])
+                                                    yml["Trainsetting"]["batchsize"],
+                                                    yml["Trainsetting"]["shuffle"])
         datacount = dataset.onefolder_datacounter(yml["Resourcedata"]["resourcepath"])
     elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
         generator = dataset.folder_dataset_generator(yml["Resourcedata"]["resourcepath"],
                                                     (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                     yml["Resourcedata"]["classes"],
-                                                    yml["Trainsetting"]["batchsize"])
+                                                    yml["Trainsetting"]["batchsize"],
+                                                    yml["Trainsetting"]["shuffle"])
         datacount = dataset.folder_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
         print("It seems to have selected an unspecified generator. Stops the program.")
@@ -138,21 +141,24 @@ def main():
             val_generator = val_dataset.text_dataset_generator(yml["Validation"]["resourcepath"],
                                                         (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                         yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"]
+                                                        yml["Trainsetting"]["batchsize"],
+                                                        yml["Validation"]["shuffle"]
                                                         )
             val_datacount = val_dataset.text_datacounter(yml["Validation"]["resourcepath"])
         elif yml["Validation"]["readdata"] == "onefolder" or yml["Validation"]["readdata"] == "Onefolder":
             val_generator = val_dataset.onefolder_dataset_generator(yml["Validation"]["resourcepath"],
                                                         (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                         yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"]
+                                                        yml["Trainsetting"]["batchsize"],
+                                                         yml["Validation"]["shuffle"]
                                                         )
             val_datacount = val_dataset.onefolder_datacounter(yml["Validation"]["resourcepath"])
         elif yml["Validation"]["readdata"] == "folder" or yml["Validation"]["readdata"] == "Folder":
             val_generator = val_dataset.folder_dataset_generator(yml["Validation"]["resourcepath"],
                                                         (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
                                                         yml["Resourcedata"]["classes"],
-                                                        yml["Trainsetting"]["batchsize"]
+                                                        yml["Trainsetting"]["batchsize"],
+                                                        yml["Validation"]["shuffle"]
                                                         )
             val_datacount = val_dataset.folder_datacounter(yml["Validation"]["resourcepath"])
         else:
@@ -199,7 +205,8 @@ def main():
             generator = generator,
             steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
             epochs = yml["Trainsetting"]["epoch"],
-            callbacks=[modelCheckpoint]
+            shuffle=yml["Trainsetting"]["shuffle"],
+            callbacks=[modelCheckpoint, tensorboard]
         )
     else:
         #validation
@@ -209,7 +216,8 @@ def main():
             epochs = yml["Trainsetting"]["epoch"],
             validation_data = val_generator,
             validation_steps = int(np.ceil(val_datacount / yml["Trainsetting"]["batchsize"])),
-            callbacks=[modelCheckpoint]
+            shuffle=yml["Trainsetting"]["shuffle"],
+            callbacks=[modelCheckpoint, tensorboard]
         )
 
     # save weights and model.

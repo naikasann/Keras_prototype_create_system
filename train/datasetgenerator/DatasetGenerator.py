@@ -39,10 +39,15 @@ class DatasetGenerator:
         return len(readlines)
     
     # Generator to read text.
-    def text_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
+    def text_dataset_generator(self, resourcepath, input_shape, classes, batchsize, shuffle=True):
         # open resorse.
         with open(resourcepath) as f:
             readlines = f.readlines()
+
+        # data shuffle.
+        if shuffle:
+            shuffle_idx = np.random.permutation(len(readlines))
+            readlines = readlines[shuffle_idx]
 
         # loop for generator.
         while True:
@@ -91,9 +96,15 @@ class DatasetGenerator:
         return len(image_list)
 
     # Generator to read folder.
-    def onefolder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
+    def onefolder_dataset_generator(self, resourcepath, input_shape, classes, batchsize, shuffle=True):
         # Refers to all the contents of a folder. (Assign a list of image paths.)
         image_list = os.listdir(resourcepath)
+
+        # data shuffle.
+        if shuffle:
+            shuffle_idx = np.random.permutation(len(image_list))
+            image_list = image_list[shuffle_idx]
+
         # for generator.
         while True:
             for image_path in image_list:
@@ -171,9 +182,9 @@ class DatasetGenerator:
         return len(imagespath)
     
     # Generator to read folder.
-    def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize):
+    def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize, shuffle=True):
         imagespath = []
-        label = []
+        labels = []
 
         # folder check.
         labeldir = os.listdir(resourcepath)
@@ -185,14 +196,19 @@ class DatasetGenerator:
             # [imagepath], [label] 
             for imagepath in images:
                 imagespath.append(os.path.join(label_path, imagepath))
-                label.append(category)
+                labels.append(category)
+        
+        if shuffle:
+            shuffle_idx = np.random.permutation(len(imagepath))
+            imagespath = imagepath[shuffle_idx]
+            labels =labels[shuffle_idx]
         
         # for genarator.
         while True:
-            for count, image in enumerate(imagespath):
+            for image, label in zip(imagespath, label):
                 # input image & label.
                 self.images.append(img_to_array(load_img(image, target_size=input_shape)) / 255.)
-                self.labels.append(to_categorical(label[count], len(classes)))
+                self.labels.append(to_categorical(label, len(classes)))
 
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
