@@ -217,3 +217,37 @@ class DatasetGenerator:
                     self.reset()
 
                     yield inputs, targets
+
+    def _generator(self, resourcepath, input_shape, classes, batchsize, alpha, shuffle=True):
+        # Retrieves a generator function in a class.
+        generator = self.text_dataset_generator(resourcepath, input_shape, classes, batchsize, shuffle)
+        while True:
+            # Take out the original image for mixing.
+            original_images , original_labels = next(generator)
+            # onehot label => label
+            labels = np.argmax(original_labels, axis = 1)
+            for original_image, original_label in zip(original_images, labels):
+                # List whether it is a different category or not
+                diff_labels = np.where(original_labels != original_label)
+                # Randomly select the images to be mixed from the list.
+                mix_idx = np.random.choice(diff_labels)
+                # Generates a random percentage of images to be mixed.
+                random_proportion = np.random.rand()
+                # The amount of features of the main image is set to be more than that of the main image.
+                # (may not be necessary?)
+                if random_proportion < 0.5:
+                    random_proportion - 1
+                # Mix the images and labels.
+                mix_img = random_proportion * original_image + (1 - random_proportion) * original_images[mix_idx]
+                mix_label = random_proportion * original_label + (1 - random_proportion) * original_label[mix_idx]
+                # input image & label.
+                self.images.append(mix_img)
+                self.labels.append(mix_label)
+            
+                # When the batch size is reached, it yields.
+                if(len(self.images) == batchsize):
+                    inputs = np.asarray(self.images, dtype = np.float32)
+                    targets = np.asarray(self.labels, dtype = np.float32)
+                    self.reset()
+
+                    yield inputs, targets
