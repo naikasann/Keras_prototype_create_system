@@ -4,6 +4,7 @@ from tensorflow.keras.utils import to_categorical
 
 import numpy as np
 import os
+import random
 
 class DatasetGenerator:
     # initial function
@@ -46,8 +47,7 @@ class DatasetGenerator:
 
         # data shuffle.
         if shuffle:
-            shuffle_idx = np.random.permutation(len(readlines))
-            readlines = readlines[shuffle_idx]
+            random.shuffle(readlines)
 
         # loop for generator.
         while True:
@@ -102,8 +102,7 @@ class DatasetGenerator:
 
         # data shuffle.
         if shuffle:
-            shuffle_idx = np.random.permutation(len(image_list))
-            image_list = image_list[shuffle_idx]
+            random.shuffle(image_list)
 
         # for generator.
         while True:
@@ -199,9 +198,9 @@ class DatasetGenerator:
                 labels.append(category)
         
         if shuffle:
-            shuffle_idx = np.random.permutation(len(imagepath))
-            imagespath = imagepath[shuffle_idx]
-            labels =labels[shuffle_idx]
+            trainlist = list(zip(imagepath, labels))
+            random.shuffle(trainlist)
+            imagespath, labels = zip(*trainlist)
         
         # for genarator.
         while True:
