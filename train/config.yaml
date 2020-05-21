@@ -12,8 +12,8 @@ running       :
 # Set the details of the data to be learned
 Resourcedata  :
   # How to read a data set(README reference)
-  # input : text, onefolder, folder
-  readdata    : text
+  # input : text, onefolder, folder, bclearning(text)
+  readdata    : bclearning
   resourcepath: ./dataset.txt
   # Image size setting
   img_row     : 227
@@ -32,12 +32,14 @@ Validation    :
   # input : text, onefolder, folder
   readdata    : text
   resourcepath: ./dataset.txt
+  shuffle     : true
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
   epoch       : 10000
   batchsize   : 128
   learnrate   : 0.00001
+  shuffle     : true
 
 # Setting up a learning model
 Modelsetting  :

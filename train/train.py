@@ -126,6 +126,13 @@ def main():
                                                     yml["Trainsetting"]["batchsize"],
                                                     yml["Trainsetting"]["shuffle"])
         datacount = dataset.folder_datacounter(yml["Resourcedata"]["resourcepath"])
+    elif yml["Resourcedata"]["readdata"] == "bclearning" or yml["Resourcedata"]["readdata"] == "BClearning":
+        generator = dataset.bclearning_generator(yml["Resourcedata"]["resourcepath"],
+                                                    (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"]),
+                                                    yml["Resourcedata"]["classes"],
+                                                    yml["Trainsetting"]["batchsize"],
+                                                    yml["Trainsetting"]["shuffle"])
+        datacount = dataset.text_datacounter(yml["Resourcedata"]["resourcepath"])
     else:
         print("It seems to have selected an unspecified generator. Stops the program.")
         exit(1)
@@ -198,6 +205,8 @@ def main():
     # next tensorboard setting.
     tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
     
+    print(next(generator))
+
     # training!
     if not yml["Validation"]["Usedata"]:
         # no validation
