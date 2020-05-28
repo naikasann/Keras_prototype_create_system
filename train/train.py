@@ -33,12 +33,12 @@ def get_available_gpus():
 def write_graph(history, write_enable, datetime, validation = False):
     # Draw and save the accuracy graph.
     plt.figure(figsize=(6,4))
-    plt.plot(history.history['acc'])
+    plt.plot(history.history['accuracy'])
     plt.title('accuracy')
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
     if validation:
-        plt.plot(history.history['val_acc'])
+        plt.plot(history.history['val_accuracy'])
         plt.legend(['traindata', 'validata'], loc='upper left')
     else:
         plt.legend(['traindata'], loc='upper left')
@@ -204,8 +204,6 @@ def main():
 
     # next tensorboard setting.
     tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
-    
-    print(next(generator))
 
     # training!
     if not yml["Validation"]["Usedata"]:
