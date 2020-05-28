@@ -10,6 +10,7 @@ from tensorflow.keras.layers import BatchNormalization, Flatten
 from tensorflow.keras.layers import Dense, Dropout, Activation
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import MaxPooling2D, GlobalAveragePooling2D, AveragePooling2D
+from tensorflow.keras.applications import MobileNetV2
 
 import yaml
 
@@ -56,6 +57,8 @@ class MyModel:
         ############################################
         if networkarchitecture == "nin" or networkarchitecture == "NiN":
             model = self.nin(input_shape, len(classes))
+        elif networkarchitecture == "mobilenet" or networkarchitecture == "MobileNet":
+            model = self.mobilenet(input_shape, len(classes))
         else:
             print("It's an unconfigured model. Use an appropriate network.")
             model = self.nin(input_shape, len(classes))
@@ -150,4 +153,38 @@ class MyModel:
         model.add(GlobalAveragePooling2D())
         model.add(Activation("softmax"))
         
+        return model
+
+    def mobilenet(self, input_shape, num_classes):
+        # Call the mobilenet.
+        print("modliienet...")
+        moblienet = MobileNetV2(weights="imagenet",
+                                include_top=False,
+                                input_shape=input_shape)
+        model = Sequential()
+        model.add(moblienet)
+        model.add(Flatten())
+        model.add(Dense(256, activation="relu"))
+        model.add(Dense(num_classes, activation="softmax"))
+
+        print('before :', len(model.trainable_weights))
+
+        # Freeze all non-input and output layers in the model.
+        # (transference learning => True)
+        moblienet.trainable = True
+
+        # Fine tuning
+        set_trainable = False
+        for layer in moblienet.layers:
+            # Set the learning layer and beyond to be trained.
+            if layer.name == "block_14_depthwise":
+                set_trainable = True
+            # Whether or not to freeze the layers.
+            if set_trainable:
+                layer.trainable = True
+            else:
+                layer.trainable = False
+
+        print('after :', len(model.trainable_weights))
+
         return model
