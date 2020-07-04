@@ -11,7 +11,7 @@ class DatasetGenerator:
     # initial function
     def __init__(self):
         self.reset()
-    
+
     # Empty the images list & labels list.
     def reset(self):
         self.images = []
@@ -23,7 +23,7 @@ class DatasetGenerator:
         # open text file.
         with open(resourcepath) as f:
             readlines = f.readlines()
-        
+
         # Input data.
         for line in readlines:
             linebuffer = line.split(" ")
@@ -39,7 +39,7 @@ class DatasetGenerator:
             readlines = f.readlines()
         # Returning the number of data
         return len(readlines)
-    
+
     # Generator to read text.
     def text_dataset_generator(self, resourcepath, input_shape, classes, batchsize, shuffle=True):
         # open resorse.
@@ -53,7 +53,7 @@ class DatasetGenerator:
         # loop for generator.
         while True:
             for line in readlines:
-                # ["image path" "label"] => linebuffer 
+                # ["image path" "label"] => linebuffer
                 linebuffer = line.split(" ")
                 try:
                     # I'll load the image, and if it doesn't work, I'll terminate the program.
@@ -71,8 +71,8 @@ class DatasetGenerator:
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
                     # Convert to Numpy array type
-                    inputs = np.asarray(self.images, dtype = np.float32)
-                    targets = np.asarray(self.labels, dtype = np.float32)
+                    inputs = np.asarray(self.images, np.float32)
+                    targets = np.asarray(self.labels, np.float32)
                     # Resetting an Instance
                     self.reset()
                     # for generator.
@@ -122,6 +122,7 @@ class DatasetGenerator:
                 # list append.
                 self.images.append(image)
 
+                append = False
                 # Labeling based on the name of the image and the name of the category.
                 for count, category in enumerate(classes):
                     # Check each category to see which label it was.
@@ -141,8 +142,8 @@ class DatasetGenerator:
 
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
-                    inputs = np.asarray(self.images, dtype = np.float32)
-                    targets = np.asarray(self.labels, dtype = np.float32)
+                    inputs = np.asarray(self.images, np.float32)
+                    targets = np.asarray(self.labels, np.float32)
                     self.reset()
 
                     yield inputs, targets
@@ -162,7 +163,7 @@ class DatasetGenerator:
             for imagepath in images:
                 input.append(os.path.join(label_path, imagepath))
                 answer.append(category)
-        # return [imagepath], [label] 
+        # return [imagepath], [label]
         return input, answer
 
     # count the number of data.
@@ -180,7 +181,7 @@ class DatasetGenerator:
                 imagespath.append(os.path.join(label_path, imagepath))
 
         return len(imagespath)
-    
+
     # Generator to read folder.
     def folder_dataset_generator(self, resourcepath, input_shape, classes, batchsize, shuffle=True):
         imagespath = []
@@ -193,27 +194,27 @@ class DatasetGenerator:
             label_path = os.path.join(resourcepath, labels)
             images = os.listdir(label_path)
             # Extracts data from a set of image files.
-            # [imagepath], [label] 
+            # [imagepath], [label]
             for imagepath in images:
                 imagespath.append(os.path.join(label_path, imagepath))
                 labels.append(category)
-        
+
         if shuffle:
-            trainlist = list(zip(imagepath, labels))
+            trainlist = list(zip(imagespath, labels))
             random.shuffle(trainlist)
             imagespath, labels = zip(*trainlist)
-        
+
         # for genarator.
         while True:
-            for image, label in zip(imagespath, label):
+            for image, label in zip(imagespath, labels):
                 # input image & label.
                 self.images.append(img_to_array(load_img(image, target_size=input_shape)) / 255.)
                 self.labels.append(to_categorical(label, len(classes)))
 
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
-                    inputs = np.asarray(self.images, dtype = np.float32)
-                    targets = np.asarray(self.labels, dtype = np.float32)
+                    inputs = np.asarray(self.images, np.float32)
+                    targets = np.asarray(self.labels, np.float32)
                     self.reset()
 
                     yield inputs, targets
@@ -241,7 +242,7 @@ class DatasetGenerator:
 
                 mix_img = random_proportion * original_image + (1 - random_proportion) * original_images[mix_idx]
                 mix_label = random_proportion * original_label + (1 - random_proportion) * original_labels[mix_idx]
-                
+
                 # Save the BCLearning image appropriately.
                 # Basically, comments, if you don't stop the program in the middle, the image will swell up.
                 # mix_img = cv2.cvtColor(mix_img, cv2.COLOR_BGR2RGB)
@@ -250,11 +251,11 @@ class DatasetGenerator:
                 # input image & label.
                 self.images.append(mix_img)
                 self.labels.append(mix_label)
-            
+
                 # When the batch size is reached, it yields.
                 if(len(self.images) == batchsize):
-                    inputs = np.asarray(self.images, dtype = np.float32)
-                    targets = np.asarray(self.labels, dtype = np.float32)
+                    inputs = np.asarray(self.images, np.float32)
+                    targets = np.asarray(self.labels, np.float32)
                     self.reset()
 
                     yield inputs, targets

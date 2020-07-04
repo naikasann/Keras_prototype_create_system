@@ -37,7 +37,7 @@ def main():
     with open("config.yaml") as file:
         print("complete!")
         yml = yaml.safe_load(file)
-    
+
     # Dataset Generator loadding.
     dataset = DatasetGenerator()
     print("test dataset loading...")
@@ -54,7 +54,7 @@ def main():
     else:
         print("It appears that you have selected a data loader that is not specified. Stops the program.")
         exit(1)
-    print("test data : ", datacount) 
+    print("test data : ", datacount)
     print("---------------------------")
 
     print("---------  model  ---------")
@@ -83,7 +83,7 @@ def main():
             exit(1)
 
         # model predict => pred_label
-        predict = model.predict(np.asarray([image], dtype=np.float32), batch_size=1)
+        predict = model.predict(np.asarray([image], np.float32), batch_size=1)
         pred_label = np.argmax(predict)
         predict_list.append(pred_label)
         # y => answer list (In fact, I don't use it. It is for real-time processing.)
@@ -91,7 +91,7 @@ def main():
 
         # Raw data of predicted values
         #print(predict)
-        
+
         bar.update(1)
 
     result = classification_report(y_list, predict_list, target_names = yml["testresourcedata"]["classes"], output_dict=True)

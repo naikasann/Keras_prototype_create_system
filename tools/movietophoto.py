@@ -16,7 +16,7 @@ def save_all_frames(video_path, dir_path, savename, ext="jpg"):
     # take movie frame.
     frames = len(str(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))))
     n = 0
-    
+
     while True:
         # Get Frame.
         ret, frame = cap.read()

@@ -37,7 +37,7 @@ class MyModel:
             model.trainable = False
 
         # compile. summury.
-        model.compile(loss=self.set_modelloss(), 
+        model.compile(loss=self.set_modelloss(),
                       optimizer=self.set_optimizers(),
                       metrics=["accuracy"])
         print("compile ok. summmury")
@@ -63,14 +63,14 @@ class MyModel:
             print("It's an unconfigured model. Use an appropriate network.")
             model = self.nin(input_shape, len(classes))
         print("network architecture setting ... ok.")
-        
+
         # model freeze?
         if not trainable:
             model.trainable = False
 
         # compile. summury.
-        model.compile(loss=self.set_modelloss(), 
-                      optimizer=self.set_optimizers(), 
+        model.compile(loss=self.set_modelloss(),
+                      optimizer=self.set_optimizers(),
                       metrics=["accuracy"])
         print("compile ok. summmury")
         # Display the results of the compiled model.
@@ -97,7 +97,7 @@ class MyModel:
         print("optimizer setting ... ok.")
 
         return opt
-    
+
     # Set the loss function and return it.
     def set_modelloss(self):
         print("model loss setting.")
@@ -113,7 +113,7 @@ class MyModel:
             loss = losses.kullback_leibler_divergence
         else:
             print("An unconfigured loss function is used. Instead, we use categorical cross-entropy.")
-            loss = loss.categorical_crossentropy
+            loss = losses.categorical_crossentropy
         print("model loss setting... ok.")
 
         return loss
@@ -152,7 +152,7 @@ class MyModel:
         model.add(Activation('relu'))
         model.add(GlobalAveragePooling2D())
         model.add(Activation("softmax"))
-        
+
         return model
 
     def mobilenet(self, input_shape, num_classes):

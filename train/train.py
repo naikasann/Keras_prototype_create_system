@@ -136,10 +136,12 @@ def main():
     else:
         print("It seems to have selected an unspecified generator. Stops the program.")
         exit(1)
-    print("traindata : ", datacount)  
+    print("traindata : ", datacount)
 
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["Usedata"])
+    val_generator = None
+    val_datacount = None
     if yml["Validation"]["Usedata"]:
         # use validation data.
         val_dataset = DatasetGenerator()
@@ -188,10 +190,10 @@ def main():
     else:
         input_shape = (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"], 3)
         model = mymodel.create_model(yml["Modelsetting"]["network_architecture"],
-                                     input_shape, 
+                                     input_shape,
                                      yml["Resourcedata"]["classes"],
                                      yml["Modelsetting"]["trainable"])
-    
+
     # callback function(tensorboard, modelcheckpoint) setting.
     # first modelcheckpoint setting.
     modelCheckpoint = ModelCheckpoint(filepath = "./result/"+ execute_time + "/model/" + yml["Trainingresult"]["model_name"] +"_{epoch:02d}.h5",
@@ -228,7 +230,7 @@ def main():
         )
 
     # save weights and model.
-    model.save_weights("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch" + ".h5")
+    model.save("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch.h5")
     # write network architecture.
     f = open("./result/" + execute_time + "/model/model_architecture.yaml", "w")
     f.write(yaml.dump(model.to_yaml()))

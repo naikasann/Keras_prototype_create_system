@@ -49,7 +49,7 @@ class memo():
         conv5_3 = Conv2D(512, (3, 3),name='conv5_3', activation='relu', padding='same')(conv5_2)
         pool5 = MaxPooling2D(pool_size=(2, 2))(conv5_3)
         x = Dropout(0.5)(pool5)
-        
+
         x = Flatten()(x)
         x = Dense(4096)(x)
         x = Activation('relu')(x)
@@ -139,6 +139,6 @@ class memo():
         x = Dropout(0.5)(x)
         #fc8
         x = Dense(num_classes, activation='softmax')(x)
-        
+
         model = Model(inputs=input_layer, outputs=x, name='model')
         return model
