@@ -33,3 +33,5 @@ Kerasを用いて学習するときに何度もコードを書くのがもった
 7. [【Python】 二つのリストの対応関係を保ったままシャッフルする - 旅行好きなソフトエンジニアの備忘録](https://mail.google.com/mail/u/2/?tab=wm&ogbl#inbox/FMfcgxwHNWJQmWdZwjDBJHsLcZWGHfTq)
 8. [kerasのto_categoricalを使ってみる | 分析ノート](https://analytics-note.xyz/machine-learning/keras-to-categorical/)
 9. [速くて軽くて精度の良い、MobileNetのポイントをまとめてみた - Qiita](https://qiita.com/simonritchie/items/f6d6196b1b0c41ca163c)
+10. [Pythonでカメラを制御する【研究用】 - Qiita](https://qiita.com/opto-line/items/7ade854c26a50a485159)
+11. [Python+OpenCVでカメラキャプチャ - Qiita](https://qiita.com/wkentaro/items/3d3bee56445894da879e)
