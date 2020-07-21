@@ -35,3 +35,4 @@ Kerasを用いて学習するときに何度もコードを書くのがもった
 9. [速くて軽くて精度の良い、MobileNetのポイントをまとめてみた - Qiita](https://qiita.com/simonritchie/items/f6d6196b1b0c41ca163c)
 10. [Pythonでカメラを制御する【研究用】 - Qiita](https://qiita.com/opto-line/items/7ade854c26a50a485159)
 11. [Python+OpenCVでカメラキャプチャ - Qiita](https://qiita.com/wkentaro/items/3d3bee56445894da879e)
+12. [pandasでcsv/tsvファイル読み込み（read_csv, read_table） | note.nkmk.me](https://note.nkmk.me/python-pandas-read-csv-tsv/)
