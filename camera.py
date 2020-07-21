@@ -8,12 +8,12 @@ import sys
 import os
 import h5py
 
-model_path = "test_10.h5"
+model_path = "./test_end_epoch.h5"
 inputshape = (227, 227)
 category_list = ["goo", "choki", "paa"]
 color_list = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
 
-windowsize = (1280, 720)
+windowsize = (1920, 1080)
 cameara_id = 1
 
 count = 0
@@ -26,6 +26,15 @@ if not capture.isOpened:
     print("Camera not found! exit program")
     sys.exit()
 
+# フォーマット・解像度・FPSの設定
+capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M','J','P','G'))
+#capture.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y','U','Y','V'))
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+capture.set(cv2.CAP_PROP_FPS, 20)
+for num in range(22):
+    print(num, '.', capture.get(num))
+
 model = load_model(model_path)
 model.summary()
 
@@ -35,15 +44,15 @@ tm.start()
 
 while(True):
     ret, frame = capture.read()
-    os.system("cls")
+    #os.system("cls")
     # resize the window(show movie size)
-    frame = cv2.resize(frame, windowsize)
+    #frame = cv2.resize(frame, windowsize)
 
-    predictframae = cv2.resize(frame, inputshape)
-    predictframae = cv2.cvtColor(predictframae, cv2.COLOR_BGR2RGB)
-    predictframae = np.asarray([predictframae], dtype=np.float32)
-    predictframae /= 255.0
-    prd = model.predict(predictframae, batch_size=1)
+    #predictframae = cv2.resize(frame, inputshape)
+    #predictframae = cv2.cvtColor(predictframae, cv2.COLOR_BGR2RGB)
+    #predictframae = np.asarray([predictframae], np.float32)
+    #predictframae /= 255.0
+    #prd = model.predict(predictframae, batch_size=24)
 
     # measure fps.
     if count == max_count:
@@ -54,17 +63,17 @@ while(True):
         count = 0
     count += 1
 
-    cv2.putText(frame, 'FPS: {:.2f}'.format(fps),
-                (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), thickness=2)
+    #cv2.putText(frame, 'FPS: {:.2f}'.format(fps),
+    #            (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), thickness=2)
 
-    for c, (category, p) in enumerate(zip(category_list, prd[0])):
-        cv2.putText(frame, "{} : {}".format(category, p),
-                    (10 , 60 + (c * 30)), cv2.FONT_HERSHEY_SIMPLEX, 1.0, color_list[c], thickness=2)
+    #for c, (category, p) in enumerate(zip(category_list, prd[0])):
+        #cv2.putText(frame, "{} : {}".format(category, p),
+                    #(10 , 60 + (c * 30)), cv2.FONT_HERSHEY_SIMPLEX, 1.0, color_list[c], thickness=2)
 
     # terminal write information
     print("======= movie info =======")
     print("FPS : ", fps)
-    print(prd)
+    #print(prd)
     print("==========================")
 
     cv2.imshow("KerasFramework_predicttest",frame)
