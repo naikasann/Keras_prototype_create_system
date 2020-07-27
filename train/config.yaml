@@ -13,15 +13,15 @@ running       :
 Resourcedata  :
   # How to read a data set(README reference)
   # input : text, onefolder, folder, bclearning(text)
-  readdata    : bclearning
+  readdata    : text
   resourcepath: ./dataset.txt
   # Image size setting
   img_row     : 227
   img_col     : 227
   # Class type (described in sequence)
-  classes     : 
-    - goo
+  classes     :
     - choki
+    - goo
     - paa
 
 # Validation data setting.
@@ -36,9 +36,9 @@ Validation    :
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
-  epoch       : 10000
-  batchsize   : 128
-  learnrate   : 0.00001
+  epoch       : 5
+  batchsize   : 16
+  learnrate   : 0.001
   shuffle     : true
 
 # Setting up a learning model
@@ -46,10 +46,10 @@ Modelsetting  :
   # categorical_crossentropy or mean_squared_error
   # binary_crossentropy or kullback_leibler_divergence.
   model_loss  : categorical_crossentropy
-  # adam or sgd or adagrad.
+  # adam or sgd or adagrad or adadelta.
   optimizers  : adam
-  # now Network in Network only.
-  network_architecture : nin
+  # now Network in Network and moblienet.
+  network_architecture : mobilenet
   # Relearning a trained model
   retrain_model   : false
   model_path  : path
@@ -72,11 +72,11 @@ callback      :
   # True => Save from judgment result, False => Save every period.
   save_best_only : true
   # True = model weights save, False = model save.
-  save_weights_only : true
+  save_weights_only : false
   # Selecting the maximum or minimum value (max => acc,val_acc, min => loss, val_loss)
   mode        : min
   # How many epochs do we run callbacks on?
-  period      : 1000
+  period      : 10
   # Set the directory of tensorboard.
   tensorboard : /
   # Number of epochs of tensorboard updates
@@ -87,9 +87,9 @@ callback      :
 #######################################################################################
 # target model setting.
 TESTModel     :
-  path        : ./result/04_22_17_18/
-  model_path  : /model/model_architecture.yaml
-  weight_path : /model/test_end_epoch.h5
+  path        : ./result/07_16_00_46/
+  model_path  : model/model_architecture.yaml
+  weight_path : model/test_end_epoch.h5
 
 # test dataset setting
 testresourcedata :
@@ -100,8 +100,3 @@ testresourcedata :
   # Image size setting
   img_row     : 227
   img_col     : 227
-  # Class type (described in sequence)
-  classes     :
-    - goo
-    - choki
-    - paa
