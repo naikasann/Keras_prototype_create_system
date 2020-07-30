@@ -1,14 +1,10 @@
-# 2020/4/10 ~ version 0.1
+# 2020/7/30 ~ version 1.1
 # This is the Keras framework.
 # You can change the way you train by changing this file.
 
 #######################################################################################
 # TRAINING CONFIG....                                                                 #
 #######################################################################################
-# execution environment setting
-running       :
-  GPU         : true
-
 # Set the details of the data to be learned
 Resourcedata  :
   # How to read a data set(README reference)
@@ -27,19 +23,45 @@ Resourcedata  :
 # Validation data setting.
 Validation    :
   # Use validation data?
-  Usedata     : true
+  isUse         : true
   # How to read a data set(README reference)
   # input : text, onefolder, folder
-  readdata    : text
-  resourcepath: ./dataset.txt
-  shuffle     : true
+  readdata    : folder
+  resourcepath: ./dataset/
 
 # Set the number of trainings, learning rate, etc.
 Trainsetting  :
-  epoch       : 5
+  epoch       : 10
   batchsize   : 16
   learnrate   : 0.001
   shuffle     : true
+  ##############################################################
+  # use imagedatagenerator function
+  useAugment  : true
+  # featurewise_center(bool)
+  featurewise_center : true
+  # samplewise_center(bool)
+  samplewise_center  : true
+  # featurewise_std_normalization(bool)
+  featurewise_std_normalization : true
+  # samplewise_std_normalization(bool)
+  samplewise_std_normalization : true
+  # zca_whitening(bool)
+  zca_whitening  : true
+  # rotation_range(int value, 0=>dont use)
+  rotation_range : 0
+  # width_shift_range(float, 0.0 => dont use)
+  width_shift_range : 0.3
+  # height_shift_range(float, 0.0 => dont use)
+  height_shift_range : 0.3
+  # horizontal_flip(bool)
+  horizontal_flip : false
+  # vertical_flip(bool)
+  vertical_flip : false
+  # validation_split(float)
+  validation_split : 0.1
+  ##############################################################
+  isBClearning : false
 
 # Setting up a learning model
 Modelsetting  :
@@ -49,7 +71,7 @@ Modelsetting  :
   # adam or sgd or adagrad or adadelta.
   optimizers  : adam
   # now Network in Network and moblienet.
-  network_architecture : mobilenet
+  network_architecture : nin
   # Relearning a trained model
   retrain_model   : false
   model_path  : path
@@ -78,7 +100,7 @@ callback      :
   # How many epochs do we run callbacks on?
   period      : 10
   # Set the directory of tensorboard.
-  tensorboard : /
+  tensorboard : ./
   # Number of epochs of tensorboard updates
   tb_epoch    : 1
 
@@ -87,9 +109,9 @@ callback      :
 #######################################################################################
 # target model setting.
 TESTModel     :
-  path        : ./result/07_16_00_46/
+  path        : ./result/07_29_13_21/
   model_path  : model/model_architecture.yaml
-  weight_path : model/test_end_epoch.h5
+  weight_path : model/test_10.h5
 
 # test dataset setting
 testresourcedata :
@@ -97,6 +119,3 @@ testresourcedata :
   # input : text, onefolder, folder
   readdata : text
   resourcepath : ./dataset.txt
-  # Image size setting
-  img_row     : 227
-  img_col     : 227
