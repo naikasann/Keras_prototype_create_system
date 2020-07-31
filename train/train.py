@@ -7,12 +7,11 @@ import datetime as dt
 import os
 import h5py
 import yaml
-import shutil
 # Self-made dataset lib
 from datasetgenerator.DatasetGenerator import DatasetGenerator
 import datasetgenerator.BCLearningGenerator as BCLearning
-from mymodel.MyModel import MyModel
-from graphplot.GraphPlot import GraphPlot
+from mymodel.CreateModel import CreateModel
+from processingresults.ProcessingResults import ProcessingResults
 
 #--------------------< function >--------------------
 # Check to see if you have a folder, and if you don't, create a folder.
@@ -25,7 +24,7 @@ def makedir(path):
 def main():
     print("######################################")
     print("# Keras Framework. Training program. #")
-    print("#      Final Update Date : 2020/7/31 #")
+    print("#      Final Update Date : 2020/8/1 #")
     print("######################################")
 
     # open congig yaml file.
@@ -34,13 +33,9 @@ def main():
         print("complete!")
         yml = yaml.safe_load(file)
 
-    # Store the execution time in a variable.
-    execute_time = dt.datetime.now().strftime("%m_%d_%H_%M")
-    makedir("result/")
-    makedir("result/" + execute_time)
-    makedir("result/" + execute_time + "/model")
-    # Copy the YAML file that contains the execution environment.
-    shutil.copy("config.yaml", "result/" + execute_time)
+    # do prepare result. (file settting)
+    processingresults = ProcessingResults()
+    processingresults.Prepareresult()
 
     # Dataset Generator loadding.
     dataset = DatasetGenerator()
@@ -61,22 +56,15 @@ def main():
 
 
     # Model loading.
-    mymodel = MyModel(yml["Modelsetting"]["optimizers"],
-                      yml["Modelsetting"]["model_loss"],
-                      yml["Trainsetting"]["learnrate"])
-    if yml["Modelsetting"]["retrain_model"]:
-        model = mymodel.load_model(yml["Modelsetting"]["model_path"],
-                                   yml["Modelsetting"]["weight_path"],
-                                   yml["Modelsetting"]["trainable"])
+    createmodel = CreateModel(yml)
+    if yml["Modelsetting"]["isLoad"]:
+        model = createmodel.load_model()
     else:
-        input_shape = (yml["Resourcedata"]["img_row"], yml["Resourcedata"]["img_col"], 3)
-        model = mymodel.create_model(yml["Modelsetting"]["network_architecture"],
-                                     input_shape,
-                                     yml["Resourcedata"]["classes"],
-                                     yml["Modelsetting"]["trainable"])
+        model = createmodel.create_model()
 
     # callback function(tensorboard, modelcheckpoint) setting.
     # first modelcheckpoint setting.
+    execute_time = processingresults.get_executetime()
     modelCheckpoint = ModelCheckpoint(filepath = "./result/"+ execute_time + "/model/" + yml["Trainingresult"]["model_name"] +"_{epoch:02d}.h5",
                                   monitor=yml["callback"]["monitor"],
                                   verbose=yml["callback"]["verbose"],
@@ -108,14 +96,10 @@ def main():
             callbacks=[modelCheckpoint, tensorboard]
         )
 
-    # save weights and model.
-    model.save("./result/" + execute_time + "/model/" + yml["Trainingresult"]["model_name"] + "_end_epoch.h5")
-    # write network architecture.
-    f = open("./result/" + execute_time + "/model/model_architecture.yaml", "w")
-    f.write(yaml.dump(model.to_yaml()))
-    f.close()
+    # save model archtechture and weight
+    processingresults.PreservationResult(model, yml["Trainingresult"]["model_name"])
     # result graph write.
-    GraphPlot.write_graph(history, yml["Trainingresult"]["graph_write"], execute_time, yml["Validation"]["isUse"])
+    processingresults.write_graph(history, yml["Trainingresult"]["graph_write"], yml["Validation"]["isUse"])
 #---------------------------------------------------------
 
 if __name__ == "__main__":
