@@ -73,7 +73,7 @@ class DatasetGenerator:
                     "height_shift_range"            : yml["Trainsetting"]["height_shift_range"],
                     "horizontal_flip"               : yml["Trainsetting"]["horizontal_flip"],
                     "vertical_flip"                 : yml["Trainsetting"]["vertical_flip"],
-                    "validation_split"              : yml["Trainsetting"]["validation_split"]
+                    "shear_range"                   : yml["Trainsetting"]["shear_range"]
                 }
                 datagen = ImageDataGenerator(**params)
             else:
