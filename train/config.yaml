@@ -58,24 +58,27 @@ Trainsetting  :
   horizontal_flip : false
   # vertical_flip(bool)
   vertical_flip : false
-  # validation_split(float)
-  validation_split : 0.1
+  # shear_range (float, 0.0 => dont use)
+  shear_range : 0.0
   ##############################################################
   isBClearning : false
 
 # Setting up a learning model
 Modelsetting  :
+  # load model? (True  => load model(h5 or json file. and pls set retrain?
+  #              False => Create model. mymodel.py load model)
+  isLoad      : true
   # categorical_crossentropy or mean_squared_error
   # binary_crossentropy or kullback_leibler_divergence.
   model_loss  : categorical_crossentropy
   # adam or sgd or adagrad or adadelta.
   optimizers  : adam
-  # now Network in Network and moblienet.
-  network_architecture : nin
   # Relearning a trained model
-  retrain_model   : false
-  model_path  : path
-  weight_path : path
+  retrain_model   : true
+  # json file or h5 file
+  model_path  : ./result/08_01_00_15/model/test_10.h5
+  # h5 weihgt file.
+  weight_path : ./result/08_01_00_15/model/testend_model_weight.h5
   # To learn or not to learn(default : true)
   trainable   : true
 
