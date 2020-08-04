@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorflow.keras as keras
-from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, LearningRateScheduler
 
 import numpy as np
 import datetime as dt
@@ -11,14 +11,16 @@ import yaml
 from datasetgenerator.DatasetGenerator import DatasetGenerator
 import datasetgenerator.BCLearningGenerator as BCLearning
 from mymodel.CreateModel import CreateModel
+from setcallback.SetCallback import SetCallback
 from processingresults.ProcessingResults import ProcessingResults
 
-#--------------------< function >--------------------
-# Check to see if you have a folder, and if you don't, create a folder.
-def makedir(path):
-    if not os.path.isdir(path):
-        os.mkdir(path)
-#----------------------------------------------------
+#-------------------< learning rate >---------------------
+def learning_rate_scheduler(epoch, learning_rate):
+    if epoch < 100:
+        return learning_rate
+    else:
+        return learning_rate / 10
+#---------------------------------------------------------
 
 #--------------------< main sequence >--------------------
 def main():
@@ -62,19 +64,9 @@ def main():
     else:
         model = createmodel.create_model()
 
-    # callback function(tensorboard, modelcheckpoint) setting.
-    # first modelcheckpoint setting.
-    execute_time = processingresults.get_executetime()
-    modelCheckpoint = ModelCheckpoint(filepath = "./result/"+ execute_time + "/model/" + yml["Trainingresult"]["model_name"] +"_{epoch:02d}.h5",
-                                  monitor=yml["callback"]["monitor"],
-                                  verbose=yml["callback"]["verbose"],
-                                  save_best_only=yml["callback"]["save_best_only"],
-                                  save_weights_only=yml["callback"]["save_weights_only"],
-                                  mode=yml["callback"]["mode"],
-                                  period=yml["callback"]["period"])
-
-    # next tensorboard setting.
-    tensorboard = TensorBoard(log_dir = yml["callback"]["tensorboard"], histogram_freq=yml["callback"]["tb_epoch"])
+    # set callbacks
+    setcallback = SetCallback(yml, processingresults, learning_rate_scheduler)
+    callbacks = setcallback.getcall_back()
 
     # training! if => is used Validation?
     if not yml["Validation"]["isUse"]:
@@ -83,7 +75,7 @@ def main():
             steps_per_epoch = int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])),
             epochs = yml["Trainsetting"]["epoch"],
             shuffle=yml["Trainsetting"]["shuffle"],
-            callbacks=[modelCheckpoint, tensorboard]
+            callbacks=callbacks
         )
     else:
         history = model.fit(
@@ -93,7 +85,7 @@ def main():
             validation_data = val_generator,
             validation_steps = int(np.ceil(val_datacount / yml["Trainsetting"]["batchsize"])),
             shuffle=yml["Trainsetting"]["shuffle"],
-            callbacks=[modelCheckpoint, tensorboard]
+            callbacks=callbacks
         )
 
     # save model archtechture and weight
