@@ -9,7 +9,7 @@ import h5py
 import yaml
 # Self-made dataset lib
 from datasetgenerator.DatasetGenerator import DatasetGenerator
-import datasetgenerator.BCLearningGenerator as BCLearning
+from datasetgenerator.BCLearningGenerator import BCLearningGenerator
 from mymodel.CreateModel import CreateModel
 from setcallback.SetCallback import SetCallback
 from processingresults.ProcessingResults import ProcessingResults
@@ -26,7 +26,7 @@ def learning_rate_scheduler(epoch, learning_rate):
 def main():
     print("######################################")
     print("# Keras Framework. Training program. #")
-    print("#      Final Update Date : 2020/8/1 #")
+    print("#      Final Update Date : 2020/8/18 #")
     print("######################################")
 
     # open congig yaml file.
@@ -48,7 +48,8 @@ def main():
     if yml["Trainsetting"]["isBClearning"]:
         print("Use BCLearning to learn!")
         print("Convert the generator to a BCLearning generator...")
-        generator = BCLearning.BCLearningGenerator(generator)
+        bc_gen = BCLearningGenerator()
+        generator = bc_gen.bclearning_generator(generator, yml["Trainsetting"]["batchsize"])
     print("---------------------------")
     print("------- val dataset -------")
     # Validation setting.
