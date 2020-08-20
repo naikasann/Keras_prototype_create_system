@@ -10,6 +10,7 @@ import yaml
 # Self-made dataset lib
 from datasetgenerator.DatasetGenerator import DatasetGenerator
 from datasetgenerator.BCLearningGenerator import BCLearningGenerator
+from datasetgenerator.MixupGenerator import MixupGenerator
 from mymodel.CreateModel import CreateModel
 from setcallback.SetCallback import SetCallback
 from processingresults.ProcessingResults import ProcessingResults
@@ -50,13 +51,18 @@ def main():
         print("Convert the generator to a BCLearning generator...")
         bc_gen = BCLearningGenerator()
         generator = bc_gen.bclearning_generator(generator, yml["Trainsetting"]["batchsize"])
+    if yml["Trainsetting"]["isMixup"]:
+        print("Use Mixup to learn!")
+        print("Convert the generator to a Mixup generator...")
+        traindata = dataset.get_dataset(yml)
+        mixup_gen = MixupGenerator(traindata, yml)
+        generator = mixup_gen.mixup_generator(generator, yml["Trainsetting"]["batchsize"])
     print("---------------------------")
     print("------- val dataset -------")
     # Validation setting.
     print("Validation use...?  : ", yml["Validation"]["isUse"])
     val_generator, val_datacount = dataset.imagedatagenerator(yml, isValidation=True)
     print("---------------------------")
-
 
     # Model loading.
     createmodel = CreateModel(yml)

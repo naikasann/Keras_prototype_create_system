@@ -54,6 +54,22 @@ class DatasetGenerator:
         # return [imagepath], [label]
         return train_data
 
+    def get_dataset(self, yml):
+        # create dataset list
+        if yml["Resourcedata"]["readdata"] == "text" or yml["Resourcedata"]["readdata"] == "TEXT":
+            train_data = self.text_dataset(yml["Resourcedata"]["resourcepath"])
+        elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
+            train_data = self.onefolder_dataet(yml["Resourcedata"]["resourcepath"],
+                                                yml["Resourcedata"]["classes"])
+        elif yml["Resourcedata"]["readdata"] == "folder" or yml["Resourcedata"]["readdata"] == "Folder":
+            train_data = self.folder_dataset(yml["Resourcedata"]["resourcepath"])
+        else:
+            print("It seems to have input an unsupported generator name. Stops the program.")
+            exit(1)
+
+        return train_data
+
+
     def imagedatagenerator(self, yml, isValidation=False):
         # use image data generator(use padding?)
         if isValidation:
@@ -83,7 +99,7 @@ class DatasetGenerator:
         # Avoiding Lint
         train_data = None
         if isValidation:
-            # Create dataset generator
+            # Create dataset list(for Validation.)
             if yml["Validation"]["readdata"] == "text" or yml["Validation"]["readdata"] == "TEXT":
                 train_data = self.text_dataset(yml["Validation"]["resourcepath"])
             elif yml["Validation"]["readdata"] == "onefolder" or yml["Validation"]["readdata"] == "Onefolder":
@@ -94,7 +110,7 @@ class DatasetGenerator:
             else:
                 print("It seems to have input an unsupported generator name. Stops the program.")
         else:
-            # Create dataset generator
+            # Create dataset list
             if yml["Resourcedata"]["readdata"] == "text" or yml["Resourcedata"]["readdata"] == "TEXT":
                 train_data = self.text_dataset(yml["Resourcedata"]["resourcepath"])
             elif yml["Resourcedata"]["readdata"] == "onefolder" or yml["Resourcedata"]["readdata"] == "Onefolder":
