@@ -50,7 +50,7 @@ def main():
         print("Use BCLearning to learn!")
         print("Convert the generator to a BCLearning generator...")
         bc_gen = BCLearningGenerator()
-        generator = bc_gen.bclearning_generator(generator, yml["Trainsetting"]["batchsize"])
+        generator = bc_gen.bclearning_generator(generator, yml["Trainsetting"]["batchsize"], int(np.ceil(datacount / yml["Trainsetting"]["batchsize"])))
     if yml["Trainsetting"]["isMixup"]:
         print("Use Mixup to learn!")
         print("Convert the generator to a Mixup generator...")

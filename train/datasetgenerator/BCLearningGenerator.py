@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from scipy.interpolate.fitpack import spalde
 
 class BCLearningGenerator:
     # initial function
@@ -11,10 +12,16 @@ class BCLearningGenerator:
         self.images = []
         self.labels = []
 
-    def bclearning_generator(self, generator, batchsize):
+    def bclearning_generator(self, generator, batchsize, sample_steps):
         while True:
             # Take out the original image for mixing.
             original_images , original_labels = next(generator)
+
+
+            ###################################
+            if original_images.shape[0] == sample_steps and original_labels[0] == sample_steps:
+                original_images , original_labels = next(generator)
+
             # onehot label => label
             labels = np.argmax(original_labels, axis = 1)
             for original_image, label, original_label in zip(original_images, labels, original_labels):
