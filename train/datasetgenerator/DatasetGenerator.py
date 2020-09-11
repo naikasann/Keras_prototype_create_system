@@ -143,13 +143,26 @@ class DatasetGenerator:
         print("============")
 
         dataframe = pd.DataFrame(train_data, index = None, columns = ["filename", "class"])
-        generator = datagen.flow_from_dataframe(dataframe,
-                                                x_col="filename",
-                                                y_col="class",
-                                                target_size=inputshape,
-                                                color_mode="rgb",
-                                                classes=classes,
-                                                class_mode=classmode,
-                                                batch_size=yml["Trainsetting"]["batchsize"],
-                                                shuffle=yml["Trainsetting"]["shuffle"])
+
+        if isValidation:
+            generator = datagen.flow_from_dataframe(dataframe,
+                                                    x_col="filename",
+                                                    y_col="class",
+                                                    target_size=inputshape,
+                                                    color_mode="rgb",
+                                                    classes=classes,
+                                                    class_mode=classmode,
+                                                    batch_size=yml["Trainsetting"]["batchsize"],
+                                                    shuffle=yml["Trainsetting"]["shuffle"])
+        else:
+            generator = datagen.flow_from_dataframe(dataframe,
+                                                    x_col="filename",
+                                                    y_col="class",
+                                                    target_size=inputshape,
+                                                    color_mode="rgb",
+                                                    classes=classes,
+                                                    class_mode=classmode,
+                                                    batch_size=yml["Validation"]["batchsize"],
+                                                    shuffle=yml["Trainsetting"]["shuffle"])
+
         return generator, datacount
