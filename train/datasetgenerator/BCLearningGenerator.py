@@ -16,17 +16,29 @@ class BCLearningGenerator:
         while True:
             # Take out the original image for mixing.
             original_images , original_labels = next(generator)
-
-
-            ###################################
+            # Rounding down of fractions
             if original_images.shape[0] == sample_steps and original_labels[0] == sample_steps:
                 original_images , original_labels = next(generator)
-
             # onehot label => label
             labels = np.argmax(original_labels, axis = 1)
             for original_image, label, original_label in zip(original_images, labels, original_labels):
                 # List whether it is a different category or not
                 diff_labels = np.where(labels != label)
+
+                # If there is no object to mix.
+                # TODO : is it true??
+                if diff_labels is None:
+                    # input image & label.
+                    self.images.append(mix_img)
+                    self.labels.append(mix_label)
+                    # When the batch size is reached, it yields.
+                    if(len(self.images) == batchsize):
+                        inputs = np.asarray(self.images, np.float32)
+                        targets = np.asarray(self.labels, np.float32)
+                        self.reset()
+
+                        yield inputs, targets
+
                 # Randomly select the images to be mixed from the list.
                 mix_idx = np.random.choice(diff_labels[0].tolist())
                 # Generates a random percentage of images to be mixed.
