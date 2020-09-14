@@ -27,17 +27,8 @@ class BCLearningGenerator:
 
                 # If there is no object to mix.
                 # TODO : is it true??
-                if diff_labels is None:
-                    # input image & label.
-                    self.images.append(mix_img)
-                    self.labels.append(mix_label)
-                    # When the batch size is reached, it yields.
-                    if(len(self.images) == batchsize):
-                        inputs = np.asarray(self.images, np.float32)
-                        targets = np.asarray(self.labels, np.float32)
-                        self.reset()
-
-                        yield inputs, targets
+                if len(diff_labels) == 0:
+                    continue
 
                 # Randomly select the images to be mixed from the list.
                 mix_idx = np.random.choice(diff_labels[0].tolist())
