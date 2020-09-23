@@ -24,6 +24,8 @@ Resourcedata  :
 Validation    :
   # Use validation data?
   isUse         : true
+  # batch size
+  batchsize   : 16
   # How to read a data set(README reference)
   # input : text, onefolder, folder
   readdata    : folder
@@ -37,7 +39,7 @@ Trainsetting  :
   shuffle     : true
   ##############################################################
   # use imagedatagenerator function
-  useAugment  : true
+  useAugment  : false
   # featurewise_center(bool)
   featurewise_center : true
   # samplewise_center(bool)
@@ -47,7 +49,7 @@ Trainsetting  :
   # samplewise_std_normalization(bool)
   samplewise_std_normalization : true
   # zca_whitening(bool)
-  zca_whitening  : true
+  zca_whitening  : false
   # rotation_range(int value, 0=>dont use)
   rotation_range : 0
   # width_shift_range(float, 0.0 => dont use)
@@ -62,6 +64,7 @@ Trainsetting  :
   shear_range : 0.0
   ##############################################################
   isBClearning : false
+  isMixup      : true
 
 # Setting up a learning model
 Modelsetting  :
