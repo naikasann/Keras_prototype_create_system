@@ -10,17 +10,22 @@ Kerasの学習部分のプログラム．
 
 ## ファイル構成
 
-- /datasetgenerator --- データセット用のジェネレータ
-- /mymodel --- モデル生成・コンパイルを行うためのクラスフォルダー
+- /datasetgenerator --- データセット用のジェネレータを作成するクラス
+- /mymodel --- モデル生成・コンパイルを行うためのクラス
+- /processingresults --- 実行結果を出力するときや、その出力準備のクラス
+- /setcallback --- keras callbackを設定するクラス
 - /result --- 実行結果が残るためのフォルダー
 - config.yaml --- 学習の設定を行うためのコンフィグファイル
-- train.py --- 学習の実行ファイル
+- train.py --- 学習の実行ファイル(mainファイル)
+- analyze_test.ipynb --- jupyter notebookで実行するテストプログラム
 
 --------------
 
 ## 実行方法
 
-train.pyがあるファイルディレクトリから
+### 学習
+
+train.pyがあるディレクトリから
 
 ``` command prompt
 python train.py
@@ -29,6 +34,25 @@ python train.py
 で学習を開始する．
 学習の設定方法は`config.yaml`を参照して学習を行う．
 設定の方法は別のREADMEに記述する．
+
+またlearningschedulerはtrain.pyの中で設定を行うことができる。
+
+### テスト
+
+analyze_test.ipynbがあるディレクトリから
+
+``` command prompt
+jupyter notebook
+```
+
+で実行し`analyze_test.ipynb`を選択し、実行していくことで精度を出すことができる。
+また詳細的な結果を出すことができる。
+
+- テストで用いる画像の出力
+- モデルサマリー
+- 正解率、再現率などのclassification report
+- 誤答した問題や正解した問題の数の出力(回答のフィルター)
+- Grad Camの出力(tensorflow2系)
 
 --------------
 
@@ -42,7 +66,7 @@ config.yamlに学習方法を記載するがデータセットの読み取り部
 テキストファイルを読み取ってそこから画像ファイル，ラベルをジェネレーターに登録していく．
 テキストファイルの中身は
 
-```dataset.txt
+``` dataset.txt
 [画像ファイルへのパス] [カテゴリの番号(0から始まる数値)]
 [画像ファイルへのパス] [カテゴリの番号(0から始まる数値)]
 [画像ファイルへのパス] [カテゴリの番号(0から始まる数値)]
