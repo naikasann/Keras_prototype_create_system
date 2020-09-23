@@ -48,5 +48,9 @@ Kerasを用いて学習するときに何度もコードを書くのがもった
 21. [Image data preprocessing](https://keras.io/api/preprocessing/image/)
 22. [[TF]KerasでModelとParameterをLoad/Saveする方法 - Qiita](https://qiita.com/supersaiakujin/items/b9c9da9497c2163d5a74)
 23. [KerasでAlexNetを構築しCifar-10を学習させてみた - Qiita](https://qiita.com/_uran_0831/items/ea2bfc8f7ba2fc858de3)
+24. [keras.preprocessing.image使い方メモ - Qiita](https://qiita.com/tom_eng_ltd/items/aed56e8c42657e22bc4c)
+25. [LearningRateScheduler](https://keras.io/api/callbacks/learning_rate_scheduler/)
+26. [KerasのLearningRateSchedulerを使って学習率を変化させる | Shikoan's ML Blog](https://blog.shikoan.com/keras-learning-rate-decay/)
+27. [「Kerasのto_categoricalの挙動ってちょっと変わってるよね」という話 - Ahogrammer](https://hironsan.hatenablog.com/entry/keras-to-categorical)
 
 and more...
