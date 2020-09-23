@@ -127,3 +127,8 @@ python resizeprog.py
 [Python, OpenCVで動画ファイルからフレームを切り出して保存 | note.nkmk.me](https://note.nkmk.me/python-opencv-video-to-still-image/)
 
 を利用．自分用に書き換え予定.
+
+### [追記]
+
+予定が詰まっているので書き換えを行うことはできなそう...
+ファイルを削除するか考え中。
