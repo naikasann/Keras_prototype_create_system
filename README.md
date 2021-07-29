@@ -82,3 +82,8 @@ tensorflow 2.x系（開発は2.2 & 2.3で開発。）
 27. [「Kerasのto_categoricalの挙動ってちょっと変わってるよね」という話 - Ahogrammer](https://hironsan.hatenablog.com/entry/keras-to-categorical)
 
 and more...
+
+---
+
+このリポジトリについて
+大学学部~大学院1年次に書いたものでだいぶ機能も使い勝手も悪いです
